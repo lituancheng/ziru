@@ -1,0 +1,9 @@
+spring:
+    profiles:
+        active:dev
+    application：
+	   name:ziru
+		
+server:
+    port:
+#	ip:
