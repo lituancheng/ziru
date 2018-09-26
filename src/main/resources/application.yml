@@ -1,9 +1,48 @@
-spring:
-    profiles:
-        active:dev
-    application：
-	   name:ziru
-		
 server:
-    port:
-#	ip:
+  ip: 127.0.0.1
+  port: 20008
+  mode: debug
+  tomcat:
+    basedir: /tmp
+    max-threads: 2000
+    uri-encoding: UTF-8
+  session:
+    timeout: 86400
+custom:
+  tomcat:
+    max-post-size: 10000000
+spring:
+  application:
+    name: ziru
+  aop:
+    proxy-target-class: true
+  profiles:
+    active: test
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: LEGACYHTML5
+    enabled: true
+    encoding: UTF-8
+    content-type: text/html
+    cache: false
+  mail:
+      host: smtp.126.com
+      username: lituancheng@126.com
+      password: li64580753
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+              required: true
+      from: lituancheng@126.com
+
+db:
+  ziru:
+    ip: 127.0.0.1
+    name: ziru
+    user: root
+    password: root
