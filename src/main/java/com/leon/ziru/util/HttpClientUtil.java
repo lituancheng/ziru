@@ -1,20 +1,8 @@
 package com.leon.ziru.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -25,18 +13,36 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 
 @SuppressWarnings("deprecation")
 public class HttpClientUtil {
 
+    private static Gson gson = new Gson();
+
+    public static String httpGet(String url) throws Exception{
+        Map<String, String> map = Maps.newHashMap();
+        return httpGet(url, map);
+    }
+
+    public static <T> T httpGet(String url, Class<T> clazz) throws Exception{
+        String content = httpGet(url);
+        return gson.fromJson(content, clazz);
+    }
+
     /**
      * 发送get请求，获取返回内容
      * @param url
-     * @param cookie
+     * @param headers
      * @return
      * @throws Exception
      */
-    public static String httpGet(String url,String cookie) throws Exception{
+    public static String httpGet(String url,Map<String, String> headers) throws Exception{
 
         String result=""; //返回信息
         //创建一个httpGet请求
@@ -45,7 +51,9 @@ public class HttpClientUtil {
         @SuppressWarnings("resource")
         HttpClient httpClient=new DefaultHttpClient();
         //添加cookie到头文件
-        request.addHeader("Cookie", cookie);
+        for(Entry<String, String> e : headers.entrySet()){
+            request.addHeader(e.getKey(), e.getValue());
+        }
         //接受客户端发回的响应
         HttpResponse httpResponse=httpClient.execute(request);
         //获取返回状态
