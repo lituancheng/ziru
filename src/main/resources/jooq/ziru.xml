@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.10.0.xsd">
+    <!-- Configure the database connection here -->
+    <jdbc>
+        <driver>com.mysql.cj.jdbc.Driver</driver>
+        <url>jdbc:mysql://118.126.115.143:3306/ziru?useSSL=false</url>
+        <user>root</user>
+        <password>root</password>
+    </jdbc>
+
+    <generator>
+        <name>org.jooq.util.JavaGenerator</name>
+        <database>
+            <name>org.jooq.util.mysql.MySQLDatabase</name>
+            <inputSchema>ziru</inputSchema>
+            <outputSchemaToDefault>true</outputSchemaToDefault>
+            <unsignedTypes>false</unsignedTypes>
+            <includes>
+                .*
+            </includes>
+            <excludes></excludes>
+            <forcedTypes>
+                <forcedType>
+                    <name>INTEGER</name>
+                    <types>TINYINT</types>
+                </forcedType>
+                <forcedType>
+                    <name>REAL</name>
+                    <types>FLOAT(.*,.*)</types>
+                </forcedType>
+                <forcedType>
+                    <userType>java.lang.String</userType>
+                    <binding>com.leon.ziru.jooq.PostgresJSONBinding</binding>
+                    <types>JSON</types>
+                </forcedType>
+            </forcedTypes>
+        </database>
+        <target>
+            <packageName>com.leon.ziru.model.ziru</packageName>
+            <directory>../../java/</directory>
+        </target>
+        <generate>
+            <pojos>true</pojos>
+            <daos>false</daos>
+        </generate>
+    </generator>
+</configuration>
