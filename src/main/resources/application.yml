@@ -1,6 +1,5 @@
 server:
-#  ip: 192.168.31.30
-  ip: 118.126.115.143
+  ip: 127.0.0.1
   port: 20008
   mode: debug
   tomcat:
@@ -28,9 +27,21 @@ spring:
     encoding: UTF-8
     content-type: text/html
     cache: false
+  mail:
+      host: smtp.126.com
+      username: lituancheng@126.com
+      password: li64580753
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+              required: true
+      from: lituancheng@126.com
 
 db:
-  taobao:
+  ziru:
     ip: 127.0.0.1
     name: ziru
     user: root
