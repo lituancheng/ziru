@@ -4,6 +4,7 @@
 package com.leon.ziru.model.ziru;
 
 
+import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
 
 import java.util.ArrayList;
@@ -30,12 +31,17 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = 1010079897;
+    private static final long serialVersionUID = 1677337776;
 
     /**
      * The reference instance of <code></code>
      */
     public static final DefaultSchema DEFAULT_SCHEMA = new DefaultSchema();
+
+    /**
+     * The table <code>mission</code>.
+     */
+    public final Mission MISSION = com.leon.ziru.model.ziru.tables.Mission.MISSION;
 
     /**
      * The table <code>user</code>.
@@ -67,6 +73,7 @@ public class DefaultSchema extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
+            Mission.MISSION,
             User.USER);
     }
 }

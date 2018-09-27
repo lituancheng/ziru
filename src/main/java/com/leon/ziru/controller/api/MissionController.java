@@ -5,6 +5,7 @@ import com.leon.ziru.model.RoomDetailResp;
 import com.leon.ziru.service.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,7 +16,9 @@ public class MissionController {
     private MissionService missionService;
 
     @RequestMapping("add")
-    public Respond add(String sourceUrl, String email, String token) throws Exception {
+    public Respond add(@RequestParam(value = "sourceUrl") String sourceUrl,
+                       @RequestParam(value = "email") String email,
+                       @RequestParam(value = "token") String token) throws Exception {
         RoomDetailResp.RoomDetailData detail = missionService.getDetail(sourceUrl);
         return new Respond(detail);
     }

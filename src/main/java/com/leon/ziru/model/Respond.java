@@ -1,6 +1,7 @@
 package com.leon.ziru.model;
 
 import com.leon.ziru.exception.BusinessException;
+import com.leon.ziru.log.ZRLogger;
 
 public class Respond {
 
@@ -27,6 +28,17 @@ public class Respond {
         this.code = ex.getErrorCode();
         this.msg = ex.getMsg();
         this.errMsg = ex.getDetailMsg();
+    }
+
+    public Respond(Exception e){
+        this.code = -1;
+        this.msg = "FAIL";
+        StringBuilder errMsg = new StringBuilder();
+        for(StackTraceElement s : e.getStackTrace()){
+            errMsg.append(s);
+        }
+        this.errMsg = errMsg.toString();
+        ZRLogger.errorLog.error("Exception:", e);
     }
 
     public int getCode() {

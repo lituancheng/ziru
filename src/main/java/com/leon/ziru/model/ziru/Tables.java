@@ -4,6 +4,7 @@
 package com.leon.ziru.model.ziru;
 
 
+import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
 
 import javax.annotation.Generated;
@@ -21,6 +22,11 @@ import javax.annotation.Generated;
 )
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>mission</code>.
+     */
+    public static final Mission MISSION = com.leon.ziru.model.ziru.tables.Mission.MISSION;
 
     /**
      * The table <code>user</code>.

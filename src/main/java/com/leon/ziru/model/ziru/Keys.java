@@ -4,7 +4,9 @@
 package com.leon.ziru.model.ziru;
 
 
+import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
+import com.leon.ziru.model.ziru.tables.records.MissionRecord;
 import com.leon.ziru.model.ziru.tables.records.UserRecord;
 
 import javax.annotation.Generated;
@@ -32,12 +34,14 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<MissionRecord, Integer> IDENTITY_MISSION = Identities0.IDENTITY_MISSION;
     public static final Identity<UserRecord, Integer> IDENTITY_USER = Identities0.IDENTITY_USER;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<MissionRecord> KEY_MISSION_PRIMARY = UniqueKeys0.KEY_MISSION_PRIMARY;
     public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = UniqueKeys0.KEY_USER_PRIMARY;
 
     // -------------------------------------------------------------------------
@@ -50,10 +54,12 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     private static class Identities0 extends AbstractKeys {
+        public static Identity<MissionRecord, Integer> IDENTITY_MISSION = createIdentity(Mission.MISSION, Mission.MISSION.ID);
         public static Identity<UserRecord, Integer> IDENTITY_USER = createIdentity(User.USER, User.USER.ID);
     }
 
     private static class UniqueKeys0 extends AbstractKeys {
+        public static final UniqueKey<MissionRecord> KEY_MISSION_PRIMARY = createUniqueKey(Mission.MISSION, "KEY_mission_PRIMARY", Mission.MISSION.ID);
         public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = createUniqueKey(User.USER, "KEY_user_PRIMARY", User.USER.ID);
     }
 }

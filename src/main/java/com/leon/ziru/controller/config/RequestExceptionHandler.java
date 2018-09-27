@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by lituancheng on 2018/9/26
  */
@@ -24,6 +26,11 @@ public final class RequestExceptionHandler {
 
     @ExceptionHandler({BusinessException.class})
     public Respond businessException(BusinessException ex) {
+        return new Respond(ex);
+    }
+
+    @ExceptionHandler({Exception.class})
+    public Respond handleException(HttpServletRequest req, Exception ex) {
         return new Respond(ex);
     }
 }

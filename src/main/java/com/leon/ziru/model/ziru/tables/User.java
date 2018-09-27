@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = 78198541;
+    private static final long serialVersionUID = 1622382667;
 
     /**
      * The reference instance of <code>user</code>
@@ -63,7 +63,7 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The column <code>user.nick_name</code>. 昵称
      */
-    public final TableField<UserRecord, String> NICK_NAME = createField("nick_name", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "昵称");
+    public final TableField<UserRecord, String> NICK_NAME = createField("nick_name", org.jooq.impl.SQLDataType.VARCHAR(64).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "昵称");
 
     /**
      * The column <code>user.open_id</code>.
@@ -73,7 +73,7 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The column <code>user.gender</code>. 性别 0：未知、1：男、2：女
      */
-    public final TableField<UserRecord, Integer> GENDER = createField("gender", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "性别 0：未知、1：男、2：女");
+    public final TableField<UserRecord, Integer> GENDER = createField("gender", org.jooq.impl.SQLDataType.INTEGER, this, "性别 0：未知、1：男、2：女");
 
     /**
      * The column <code>user.province</code>. 省
