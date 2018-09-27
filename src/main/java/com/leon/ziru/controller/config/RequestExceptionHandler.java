@@ -1,5 +1,7 @@
 package com.leon.ziru.controller.config;
 
+import com.leon.ziru.exception.BusinessException;
+import com.leon.ziru.model.Respond;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,5 +20,10 @@ public final class RequestExceptionHandler {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public Object methodArgumentNotValidException(MethodArgumentNotValidException ex) {
         return new Object();
+    }
+
+    @ExceptionHandler({BusinessException.class})
+    public Respond businessException(BusinessException ex) {
+        return new Respond(ex);
     }
 }

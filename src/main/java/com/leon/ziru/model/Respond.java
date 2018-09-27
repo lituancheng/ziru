@@ -1,5 +1,7 @@
 package com.leon.ziru.model;
 
+import com.leon.ziru.exception.BusinessException;
+
 public class Respond {
 
     private int code;
@@ -19,6 +21,12 @@ public class Respond {
     public Respond(String msg) {
         this();
         this.msg = msg;
+    }
+
+    public Respond(BusinessException ex) {
+        this.code = ex.getErrorCode();
+        this.msg = ex.getMsg();
+        this.errMsg = ex.getDetailMsg();
     }
 
     public int getCode() {

@@ -9,6 +9,7 @@ import com.leon.ziru.model.RoomDetailResp;
 import com.leon.ziru.model.RoomDetailResp.RoomDetailData;
 import com.leon.ziru.model.consts.CityCode;
 import com.leon.ziru.util.HttpClientUtil;
+import org.jooq.tools.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -16,14 +17,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class ZiruService {
+public class MissionService {
 
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
     private static final String ZR_DETAIL_PATTERN = "https?://m\\.ziroom.com/(.*?)/room\\?id=([0-9]+).*";
     private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/v7/room/detail.json?city_code=%s&id=%s";
 
-    public static RoomDetailData getDetail(String url) throws Exception {
+    public RoomDetailData getDetail(String url) throws Exception {
         Pattern compile = Pattern.compile(ZR_DETAIL_PATTERN);
         Matcher matcher = compile.matcher(url);
         if(matcher.find()){
@@ -39,17 +40,19 @@ public class ZiruService {
             headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
             String content = HttpClientUtil.httpGet(String.format(DETAIL_TEMPLATE, cityCode.getCode(), roomId), headers);
             RoomDetailResp resp = gson.fromJson(content, RoomDetailResp.class);
-            if(resp.error_code == 0)
-                return resp.data;
+            if(resp.error_code == 0){
+                RoomDetailData data = resp.data;
+                if(data.status.equals("zxpzz") || data.status.equals("tzpzz")
+                        || (data.status.equals("dzz") && !StringUtils.isBlank(data.will_unrent_date))){
+                    return data;
+                }else {
+                    throw new BusinessException(BusinessError.GENENRAL, "只有配置中和待释放的房源可以监控");
+                }
+            }
             else
                 throw new BusinessException(BusinessError.ZIRU_GET_DATA_ERROR);
         }else {
             throw new BusinessException(BusinessError.GENENRAL, "链接格式错误");
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        RoomDetailData data = getDetail("http://m.ziroom.com/SZ/room?id=61378371&from=singlemessage");
-        System.out.println(data.bedroom);
     }
 }
