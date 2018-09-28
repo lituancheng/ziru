@@ -9,7 +9,6 @@ import com.leon.ziru.exception.BusinessException;
 import com.leon.ziru.model.RoomDetailResp;
 import com.leon.ziru.model.RoomDetailResp.RoomDetailData;
 import com.leon.ziru.model.consts.CityCode;
-import com.leon.ziru.model.session.SessionUser;
 import com.leon.ziru.model.ziru.tables.pojos.Mission;
 import com.leon.ziru.util.HttpClientUtil;
 import com.leon.ziru.util.SessionUtil;
@@ -17,6 +16,8 @@ import org.jooq.tools.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,18 +30,52 @@ public class MissionService {
     private static final String ZR_DETAIL_PATTERN = "https?://m\\.ziroom.com/(.*?)/room\\?id=([0-9]+).*";
     private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/v7/room/detail.json?city_code=%s&id=%s";
 
+    //dzz 可入住 ycz 已入住 yxd 已預定 zxpzz 配置中 tzpzz 配置中
+    private HashMap<String, Integer> statusMap = new HashMap<String, Integer>(){
+        {
+            put("dzz", 1);
+            put("ycz", 2);
+            put("yxd", 3);
+            put("zxpzz", 4);
+            put("tzpzz", 4);
+        }
+    };
+
     @Autowired
     private MissionDao missionDao;
 
-    public void addMission(String sourceUrl, String email, String token) throws Exception {
+    public Mission get(Integer id){
+        return missionDao.get(id);
+    }
+
+    public List<Mission> list(String token){
+        Integer userId = SessionUtil.getUserId(token);
+        return missionDao.getList(userId);
+    }
+
+    public Mission addMission(String sourceUrl, String email, String token) throws Exception {
+        Integer userId = SessionUtil.getUserId(token);
+        List<Mission> enableList = missionDao.getEnableList(userId);
+        if(enableList != null && enableList.size() > 1)
+            throw new BusinessException(BusinessError.GENENRAL, "因服务器资源有限,现阶段每人只能添加一个监控任务");
         RoomDetailData detail = getDetail(sourceUrl);
-        SessionUser sessionUser = SessionUtil.get(token);
-        Mission mission = missionDao.get(sourceUrl, sessionUser.userId);
+        Mission mission = missionDao.get(sourceUrl, userId);
         if(mission != null)
             throw new BusinessException(BusinessError.GENENRAL, "该任务已存在，请不要重复创建");
         Mission newMission = new Mission();
-//        newMission.setRoomName(detail.);
-//        missionDao.insert()
+        newMission.setRoomName(detail.name);
+        newMission.setBedRoomCount(detail.bedroom);
+        newMission.setRoomNo(detail.index_no);
+        newMission.setFace(detail.face);
+        newMission.setFloor(detail.floor);
+        newMission.setFloorTotal(detail.floor_total);
+        newMission.setSubwayPrimary(detail.subway_primary);
+        newMission.setRoomStatus(statusMap.get(detail.status));
+        newMission.setSourceUrl(sourceUrl);
+        newMission.setUserId(userId);
+        newMission.setEmail(email);
+        missionDao.insert(newMission);
+        return newMission;
     }
 
     public RoomDetailData getDetail(String url) throws Exception {

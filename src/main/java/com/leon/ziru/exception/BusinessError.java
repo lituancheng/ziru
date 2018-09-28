@@ -5,6 +5,7 @@ public enum BusinessError{
     GENENRAL(Module.GENERAL, 0, "通用异常"),
 
     AUTH_LOGIN_FAIL(Module.AUTH, 0, "登录失败，请稍后重试"),
+    AUTH_LOGIN_INVALID(Module.AUTH, 1, "登录状态失效，请重新登录"),
 
     ZIRU_GET_DATA_ERROR(Module.ZIRU, 1, "获取自如数据异常"),
 

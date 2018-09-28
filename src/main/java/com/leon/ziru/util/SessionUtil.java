@@ -1,5 +1,7 @@
 package com.leon.ziru.util;
 
+import com.leon.ziru.exception.BusinessError;
+import com.leon.ziru.exception.BusinessException;
 import com.leon.ziru.model.session.SessionUser;
 
 import java.util.UUID;
@@ -9,12 +11,19 @@ public class SessionUtil {
     private static ExpiryMap<String, SessionUser> sessionMap = new ExpiryMap<>();
 
     public static String put(SessionUser sessionUser){
-        String _3rdKey = UUID.randomUUID().toString().replace("-", "");
-        sessionMap.put(_3rdKey, sessionUser, 1000 * 7200);
-        return _3rdKey;
+        String token = UUID.randomUUID().toString().replace("-", "");
+        sessionMap.put(token, sessionUser, 1000 * 72000);
+        return token;
     }
 
-    public static SessionUser get(String _3rdKey){
-        return sessionMap.get(_3rdKey);
+    public static SessionUser get(String token){
+        SessionUser sessionUser = sessionMap.get(token);
+        if(sessionUser == null)
+            throw new BusinessException(BusinessError.AUTH_LOGIN_INVALID);
+        return sessionUser;
+    }
+
+    public static Integer getUserId(String token){
+        return get(token).userId;
     }
 }

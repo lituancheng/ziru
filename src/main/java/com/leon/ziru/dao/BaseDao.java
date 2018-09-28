@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  */
 public abstract class BaseDao {
 
+    public static final int DELETE = -1;
     public static final int NORMAL = 0;
     public static final int NO_NORMAL = 1;
 

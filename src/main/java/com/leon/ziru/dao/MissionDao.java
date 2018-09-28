@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public class MissionDao extends BaseDao {
 
-    public Mission get(Integer id){
+    public Mission  get(Integer id){
         return ziruDsl.selectFrom(Tables.MISSION).where(Tables.MISSION.ID.eq(id)).fetchOneInto(Mission.class);
     }
 
@@ -29,7 +29,19 @@ public class MissionDao extends BaseDao {
 
     public List<Mission> getList(Integer userId){
         return ziruDsl.selectFrom(Tables.MISSION)
-                .where(Tables.MISSION.USER_ID.eq(userId))
+                .where(
+                        Tables.MISSION.USER_ID.eq(userId)
+                        .and(Tables.MISSION.STATUS.ne(DELETE))
+                )
+                .fetchInto(Mission.class);
+    }
+
+    public List<Mission> getEnableList(Integer userId){
+        return ziruDsl.selectFrom(Tables.MISSION)
+                .where(
+                        Tables.MISSION.USER_ID.eq(userId)
+                        .and(Tables.MISSION.STATUS.eq(NORMAL))
+                )
                 .fetchInto(Mission.class);
     }
 

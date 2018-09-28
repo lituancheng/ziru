@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission extends TableImpl<MissionRecord> {
 
-    private static final long serialVersionUID = -1114762973;
+    private static final long serialVersionUID = 304495740;
 
     /**
      * The reference instance of <code>mission</code>
@@ -73,17 +73,52 @@ public class Mission extends TableImpl<MissionRecord> {
     /**
      * The column <code>mission.room_name</code>. 房源名称
      */
-    public final TableField<MissionRecord, String> ROOM_NAME = createField("room_name", org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "房源名称");
+    public final TableField<MissionRecord, String> ROOM_NAME = createField("room_name", org.jooq.impl.SQLDataType.VARCHAR(128).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "房源名称");
+
+    /**
+     * The column <code>mission.bed_room_count</code>. 卧室数量
+     */
+    public final TableField<MissionRecord, Integer> BED_ROOM_COUNT = createField("bed_room_count", org.jooq.impl.SQLDataType.INTEGER, this, "卧室数量");
+
+    /**
+     * The column <code>mission.room_no</code>. 卧室编号
+     */
+    public final TableField<MissionRecord, String> ROOM_NO = createField("room_no", org.jooq.impl.SQLDataType.VARCHAR(16).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "卧室编号");
+
+    /**
+     * The column <code>mission.face</code>. 朝向
+     */
+    public final TableField<MissionRecord, String> FACE = createField("face", org.jooq.impl.SQLDataType.VARCHAR(16).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "朝向");
+
+    /**
+     * The column <code>mission.floor</code>. 层数
+     */
+    public final TableField<MissionRecord, Integer> FLOOR = createField("floor", org.jooq.impl.SQLDataType.INTEGER, this, "层数");
+
+    /**
+     * The column <code>mission.floor_total</code>. 总层数
+     */
+    public final TableField<MissionRecord, Integer> FLOOR_TOTAL = createField("floor_total", org.jooq.impl.SQLDataType.INTEGER, this, "总层数");
+
+    /**
+     * The column <code>mission.subway_primary</code>. 距地铁距离信息
+     */
+    public final TableField<MissionRecord, String> SUBWAY_PRIMARY = createField("subway_primary", org.jooq.impl.SQLDataType.VARCHAR(128), this, "距地铁距离信息");
 
     /**
      * The column <code>mission.room_status</code>. 房屋状态
      */
-    public final TableField<MissionRecord, String> ROOM_STATUS = createField("room_status", org.jooq.impl.SQLDataType.VARCHAR(32).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "房屋状态");
+    public final TableField<MissionRecord, Integer> ROOM_STATUS = createField("room_status", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "房屋状态");
 
     /**
-     * The column <code>mission.status</code>. 0 运行中 1 已停止
+     * The column <code>mission.email</code>. 通知邮箱
      */
-    public final TableField<MissionRecord, Integer> STATUS = createField("status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "0 运行中 1 已停止");
+    public final TableField<MissionRecord, String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "通知邮箱");
+
+    /**
+     * The column <code>mission.status</code>. -1 已删除 0 运行中 1 已停止
+     */
+    public final TableField<MissionRecord, Integer> STATUS = createField("status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "-1 已删除 0 运行中 1 已停止");
 
     /**
      * The column <code>mission.create_time</code>.
