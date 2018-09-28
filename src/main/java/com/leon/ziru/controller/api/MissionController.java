@@ -1,8 +1,11 @@
 package com.leon.ziru.controller.api;
 
+import com.leon.ziru.exception.BusinessError;
+import com.leon.ziru.exception.BusinessException;
 import com.leon.ziru.model.Respond;
 import com.leon.ziru.model.ziru.tables.pojos.Mission;
 import com.leon.ziru.service.MissionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +24,8 @@ public class MissionController {
     public Respond add(@RequestParam(value = "sourceUrl") String sourceUrl,
                        @RequestParam(value = "email") String email,
                        @RequestParam(value = "token") String token) throws Exception {
+        if(StringUtils.isEmpty(sourceUrl) || StringUtils.isEmpty(email))
+            throw new BusinessException(BusinessError.GENENRAL, "请填写完毕再提交任务");
         Mission mission = missionService.addMission(sourceUrl, email, token);
         return new Respond(mission);
     }
