@@ -1,7 +1,9 @@
 package com.leon.ziru.controller;
 
+import com.leon.ziru.exception.BusinessException;
 import com.leon.ziru.model.Respond;
 import com.leon.ziru.service.AuthService;
+import com.leon.ziru.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,9 +18,22 @@ public class AuthController {
 
     @RequestMapping("login")
     public Respond login(@RequestParam String code){
-        String _3rdKey = authService.login(code);
+        String token = authService.login(code);
         Respond respond = new Respond();
-        respond.setData(_3rdKey);
+        respond.setData(token);
         return new Respond(respond);
+    }
+
+    @RequestMapping("check_session")
+    public Respond checkSession(@RequestParam String token){
+        boolean valid = true;
+        try {
+            SessionUtil.get(token);
+        } catch (BusinessException e) {
+            valid = false;
+        }
+        Respond respond = new Respond();
+        respond.setData(valid);
+        return respond;
     }
 }

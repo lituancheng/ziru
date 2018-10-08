@@ -1,5 +1,5 @@
 server:
-  ip: 192.168.31.57
+  ip: 127.0.0.1
   port: 20008
   mode: debug
   tomcat:
@@ -42,7 +42,7 @@ spring:
 
 db:
   ziru:
-    ip: 118.126.115.143
+    ip: 127.0.0.1
     name: ziru
     user: root
     password: root

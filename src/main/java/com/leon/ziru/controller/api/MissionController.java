@@ -26,7 +26,18 @@ public class MissionController {
                        @RequestParam(value = "token") String token) throws Exception {
         if(StringUtils.isEmpty(sourceUrl) || StringUtils.isEmpty(email))
             throw new BusinessException(BusinessError.GENENRAL, "请填写完毕再提交任务");
-        Mission mission = missionService.addMission(sourceUrl, email, token);
+        Mission mission = missionService.saveMission(sourceUrl, email, null, token);
+        return new Respond(mission);
+    }
+
+    @RequestMapping("update")
+    public Respond add(@RequestParam(value = "sourceUrl") String sourceUrl,
+                       @RequestParam(value = "email") String email,
+                       @RequestParam(value = "id") Integer id,
+                       @RequestParam(value = "token") String token) throws Exception {
+        if(StringUtils.isEmpty(sourceUrl) || StringUtils.isEmpty(email))
+            throw new BusinessException(BusinessError.GENENRAL, "请填写完毕再提交任务");
+        Mission mission = missionService.saveMission(sourceUrl, email, id, token);
         return new Respond(mission);
     }
 
@@ -34,6 +45,14 @@ public class MissionController {
     public Respond get(@RequestParam(value = "id") Integer id) throws Exception {
         Mission mission = missionService.get(id);
         return new Respond(mission);
+    }
+
+    @RequestMapping("delete")
+    public Respond delete(@RequestParam(value = "id") Integer id, @RequestParam(value = "token") String token) throws Exception {
+        boolean result = missionService.delete(id, token);
+        Respond respond = new Respond();
+        respond.setData(result);
+        return respond;
     }
 
     @RequestMapping("list")

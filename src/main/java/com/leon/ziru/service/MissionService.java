@@ -6,14 +6,18 @@ import com.google.gson.GsonBuilder;
 import com.leon.ziru.dao.MissionDao;
 import com.leon.ziru.exception.BusinessError;
 import com.leon.ziru.exception.BusinessException;
+import com.leon.ziru.log.ZRLogger;
+import com.leon.ziru.mail.Mailer;
 import com.leon.ziru.model.RoomDetailResp;
 import com.leon.ziru.model.RoomDetailResp.RoomDetailData;
 import com.leon.ziru.model.consts.CityCode;
+import com.leon.ziru.model.session.SessionUser;
 import com.leon.ziru.model.ziru.tables.pojos.Mission;
 import com.leon.ziru.util.HttpClientUtil;
 import com.leon.ziru.util.SessionUtil;
 import org.jooq.tools.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -27,6 +31,7 @@ public class MissionService {
 
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
+    private static final String EMAIL_PATTERN = "^([\\w-_]+(?:\\.[\\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\\.[a-z]{2,6})$";
     private static final String ZR_DETAIL_PATTERN = "https?://m\\.ziroom.com/(.*?)/room\\?id=([0-9]+).*";
     private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/v7/room/detail.json?city_code=%s&id=%s";
 
@@ -42,6 +47,9 @@ public class MissionService {
     };
 
     @Autowired
+    private Mailer mailer;
+
+    @Autowired
     private MissionDao missionDao;
 
     public Mission get(Integer id){
@@ -53,29 +61,38 @@ public class MissionService {
         return missionDao.getList(userId);
     }
 
-    public Mission addMission(String sourceUrl, String email, String token) throws Exception {
+    public Mission saveMission(String sourceUrl, String email, Integer id, String token) throws Exception {
         Integer userId = SessionUtil.getUserId(token);
-        List<Mission> enableList = missionDao.getEnableList(userId);
-        if(enableList != null && enableList.size() > 1)
-            throw new BusinessException(BusinessError.GENENRAL, "因服务器资源有限,现阶段每人只能添加一个监控任务");
+        if(id == null){ //新增
+            List<Mission> enableList = missionDao.getEnableList(userId);
+            if(enableList != null && enableList.size() > 1)
+                throw new BusinessException(BusinessError.GENENRAL, "因服务器资源有限,现阶段每人只能添加一个监控任务");
+        }
+        if(!Pattern.matches(EMAIL_PATTERN, email))
+            throw new BusinessException(BusinessError.GENENRAL, "邮箱格式不正确");
         RoomDetailData detail = getDetail(sourceUrl);
-        Mission mission = missionDao.get(sourceUrl, userId);
-        if(mission != null)
+        Mission m = missionDao.get(sourceUrl, userId);
+        if(m != null)
             throw new BusinessException(BusinessError.GENENRAL, "该任务已存在，请不要重复创建");
-        Mission newMission = new Mission();
-        newMission.setRoomName(detail.name);
-        newMission.setBedRoomCount(detail.bedroom);
-        newMission.setRoomNo(detail.index_no);
-        newMission.setFace(detail.face);
-        newMission.setFloor(detail.floor);
-        newMission.setFloorTotal(detail.floor_total);
-        newMission.setSubwayPrimary(detail.subway_primary);
-        newMission.setRoomStatus(statusMap.get(detail.status));
-        newMission.setSourceUrl(sourceUrl);
-        newMission.setUserId(userId);
-        newMission.setEmail(email);
-        missionDao.insert(newMission);
-        return newMission;
+        Mission mission = new Mission();
+        mission.setRoomName(detail.name);
+        mission.setBedRoomCount(detail.bedroom);
+        mission.setRoomNo(detail.index_no);
+        mission.setFace(detail.face);
+        mission.setFloor(detail.floor);
+        mission.setFloorTotal(detail.floor_total);
+        mission.setSubwayPrimary(detail.subway_primary);
+        mission.setRoomStatus(statusMap.get(detail.status));
+        mission.setSourceUrl(sourceUrl);
+        mission.setUserId(userId);
+        mission.setEmail(email);
+        if(id == null){
+            missionDao.insert(mission);
+        }else {
+            mission.setId(id);
+            missionDao.update(mission);
+        }
+        return mission;
     }
 
     public RoomDetailData getDetail(String url) throws Exception {
@@ -107,6 +124,37 @@ public class MissionService {
                 throw new BusinessException(BusinessError.ZIRU_GET_DATA_ERROR);
         }else {
             throw new BusinessException(BusinessError.GENENRAL, "链接格式错误");
+        }
+    }
+
+    public boolean delete(Integer id, String token){
+        SessionUser user = SessionUtil.get(token);
+        Mission mission = missionDao.get(id);
+        if(!mission.getUserId().equals(user.userId))
+            throw new BusinessException(BusinessError.ZIRU_ACCESS_DATA_ERROR);
+        return missionDao.delete(id);
+    }
+
+    /**
+     * 每隔30分钟监测一波房源变化
+     */
+    @Scheduled(cron = "0 0/30 *  * * ? ")
+    public void monitoring(){
+        List<Mission> missionList = missionDao.getAllEnableList();
+        for(Mission m : missionList){
+            try {
+                RoomDetailData detail = getDetail(m.getSourceUrl());
+                Integer status = statusMap.get(detail.status);
+                if(!status.equals(m.getRoomStatus())){    //房源状态改变了
+                    mailer.sendSimpleMail("自如抢房通知",
+                            "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail());
+                    m.setStatus(status);
+                    missionDao.update(m);
+                    missionDao.setClose(m.getId());
+                }
+            } catch (Exception e) {
+                ZRLogger.errorLog.error("monitoring Exception:", e);
+            }
         }
     }
 }

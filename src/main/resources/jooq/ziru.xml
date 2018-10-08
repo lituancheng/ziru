@@ -3,7 +3,7 @@
     <!-- Configure the database connection here -->
     <jdbc>
         <driver>com.mysql.cj.jdbc.Driver</driver>
-        <url>jdbc:mysql://118.126.115.143:3306/ziru?useSSL=false</url>
+        <url>jdbc:mysql://127.0.0.1:3306/ziru?useSSL=false</url>
         <user>root</user>
         <password>root</password>
     </jdbc>

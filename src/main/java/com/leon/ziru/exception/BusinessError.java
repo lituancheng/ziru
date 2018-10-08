@@ -8,6 +8,7 @@ public enum BusinessError{
     AUTH_LOGIN_INVALID(Module.AUTH, 1, "登录状态失效，请重新登录"),
 
     ZIRU_GET_DATA_ERROR(Module.ZIRU, 1, "获取自如数据异常"),
+    ZIRU_ACCESS_DATA_ERROR(Module.ZIRU, 2, "访问数据失败"),
 
 
     ;
