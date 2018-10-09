@@ -71,6 +71,11 @@ public class MissionService {
         if(!Pattern.matches(EMAIL_PATTERN, email))
             throw new BusinessException(BusinessError.GENENRAL, "邮箱格式不正确");
         RoomDetailData detail = getDetail(sourceUrl);
+        if(detail.status.equals("zxpzz") || detail.status.equals("tzpzz")
+                || (detail.status.equals("dzz") && !StringUtils.isBlank(detail.will_unrent_date))){
+        }else {
+            throw new BusinessException(BusinessError.GENENRAL, "只有配置中和待释放的房源可以监控");
+        }
         Mission m = missionDao.get(sourceUrl, userId);
         if(m != null)
             throw new BusinessException(BusinessError.GENENRAL, "该任务已存在，请不要重复创建");
@@ -112,13 +117,7 @@ public class MissionService {
             String content = HttpClientUtil.httpGet(String.format(DETAIL_TEMPLATE, cityCode.getCode(), roomId), headers);
             RoomDetailResp resp = gson.fromJson(content, RoomDetailResp.class);
             if(resp.error_code == 0){
-                RoomDetailData data = resp.data;
-                if(data.status.equals("zxpzz") || data.status.equals("tzpzz")
-                        || (data.status.equals("dzz") && !StringUtils.isBlank(data.will_unrent_date))){
-                    return data;
-                }else {
-                    throw new BusinessException(BusinessError.GENENRAL, "只有配置中和待释放的房源可以监控");
-                }
+                return resp.data;
             }
             else
                 throw new BusinessException(BusinessError.ZIRU_GET_DATA_ERROR);
@@ -138,7 +137,7 @@ public class MissionService {
     /**
      * 每隔30分钟监测一波房源变化
      */
-    @Scheduled(cron = "0 0/30 *  * * ? ")
+    @Scheduled(cron = "0 0/2 *  * * ? ")
     public void monitoring(){
         List<Mission> missionList = missionDao.getAllEnableList();
         for(Mission m : missionList){
