@@ -137,7 +137,7 @@ public class MissionService {
     /**
      * 每隔30分钟监测一波房源变化
      */
-    @Scheduled(cron = "0 0/2 *  * * ? ")
+    @Scheduled(cron = "0 0/30 *  * * ? ")
     public void monitoring(){
         List<Mission> missionList = missionDao.getAllEnableList();
         for(Mission m : missionList){
@@ -147,7 +147,7 @@ public class MissionService {
                 if(!status.equals(m.getRoomStatus())){    //房源状态改变了
                     mailer.sendSimpleMail("自如抢房通知",
                             "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail());
-                    m.setStatus(status);
+                    m.setRoomStatus(status);
                     missionDao.update(m);
                     missionDao.setClose(m.getId());
                 }
