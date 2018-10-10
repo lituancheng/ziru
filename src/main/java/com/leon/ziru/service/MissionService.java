@@ -124,7 +124,7 @@ public class MissionService {
             String code = matcher.group(1);
             CityCode cityCode = CityCode.codeOf(code);
             if(cityCode == null)
-                return null;
+                throw new BusinessException(BusinessError.GENENRAL, "目前不支持监控该区域的房源，如有需要请联系客服");
             String roomId = matcher.group(2);
             Map<String, String> headers = Maps.newHashMap();
             headers.put("Accept", "application/json;version=");
@@ -155,11 +155,13 @@ public class MissionService {
      * 每隔30分钟监测一波房源变化
      */
     @Scheduled(cron = "0 0/30 *  * * ? ")
-    public void monitoring(){
+    public void monitoring() {
+        AccessTokenResp accessTokenResp = null;
         List<Mission> missionList = missionDao.getAllEnableList();
         for(Mission m : missionList){
             try {
                 RoomDetailData detail = getDetail(m.getSourceUrl());
+                ZRLogger.infoLog.info(m.getRoomName() + "：" + gson.toJson(detail));
                 Integer status = statusMap.get(detail.status);
                 if(!status.equals(m.getRoomStatus())){    //房源状态改变了
                     mailer.sendSimpleMail("自如抢房通知",
@@ -168,7 +170,9 @@ public class MissionService {
                     missionDao.update(m);
                     missionDao.setClose(m.getId());
 
-                    AccessTokenResp accessTokenResp = HttpClientUtil.httpGet(GET_ACCESS_TOKEN_URL, AccessTokenResp.class);
+                    if(accessTokenResp == null)
+                        accessTokenResp = HttpClientUtil.httpGet(GET_ACCESS_TOKEN_URL, AccessTokenResp.class);
+
                     if(accessTokenResp.errcode == 0) {
                         String sendUrl = SEND_TEMPLATE_URL + accessTokenResp.access_token;
                         if(!StringUtils.isEmpty(m.getFormId())) {
