@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission implements Serializable {
 
-    private static final long serialVersionUID = -1320613091;
+    private static final long serialVersionUID = 601491778;
 
     private Integer   id;
     private String    sourceUrl;
@@ -37,7 +37,9 @@ public class Mission implements Serializable {
     private String    subwayPrimary;
     private Integer   roomStatus;
     private String    email;
+    private String    formId;
     private Integer   status;
+    private Integer   emailStatus;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -56,7 +58,9 @@ public class Mission implements Serializable {
         this.subwayPrimary = value.subwayPrimary;
         this.roomStatus = value.roomStatus;
         this.email = value.email;
+        this.formId = value.formId;
         this.status = value.status;
+        this.emailStatus = value.emailStatus;
         this.createTime = value.createTime;
         this.updateTime = value.updateTime;
     }
@@ -74,7 +78,9 @@ public class Mission implements Serializable {
         String    subwayPrimary,
         Integer   roomStatus,
         String    email,
+        String    formId,
         Integer   status,
+        Integer   emailStatus,
         Timestamp createTime,
         Timestamp updateTime
     ) {
@@ -90,7 +96,9 @@ public class Mission implements Serializable {
         this.subwayPrimary = subwayPrimary;
         this.roomStatus = roomStatus;
         this.email = email;
+        this.formId = formId;
         this.status = status;
+        this.emailStatus = emailStatus;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -191,12 +199,28 @@ public class Mission implements Serializable {
         this.email = email;
     }
 
+    public String getFormId() {
+        return this.formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
+    }
+
     public Integer getStatus() {
         return this.status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getEmailStatus() {
+        return this.emailStatus;
+    }
+
+    public void setEmailStatus(Integer emailStatus) {
+        this.emailStatus = emailStatus;
     }
 
     public Timestamp getCreateTime() {
@@ -231,7 +255,9 @@ public class Mission implements Serializable {
         sb.append(", ").append(subwayPrimary);
         sb.append(", ").append(roomStatus);
         sb.append(", ").append(email);
+        sb.append(", ").append(formId);
         sb.append(", ").append(status);
+        sb.append(", ").append(emailStatus);
         sb.append(", ").append(createTime);
         sb.append(", ").append(updateTime);
 

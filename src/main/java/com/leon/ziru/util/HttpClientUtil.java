@@ -14,6 +14,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -165,15 +167,125 @@ public class HttpClientUtil {
         return responseText.toString();
     }
 
+    public static <T> T httpPostJson(String url, String content, Class<T> clazz) {
+        String resp = httpPostJson(url, content);
+        return gson.fromJson(resp, clazz);
+    }
+
+    public static String httpPostJson(String url, String paramJson) {
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            // 建立http连接
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            // 设置允许输出
+            conn.setDoOutput(true);
+            // 设置允许输入
+            conn.setDoInput(true);
+            // 设置不用缓存
+            conn.setUseCaches(false);
+            // 设置传递方式
+            conn.setRequestMethod("POST");
+            // 设置维持长连接
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            // 设置文件字符集:
+            conn.setRequestProperty("Charset", "UTF-8");
+
+            // 转换为字节数组
+            byte[] data = (paramJson.toString()).getBytes();
+            // 设置文件长度
+            conn.setRequestProperty("Content-Length",
+                    String.valueOf(data.length));
+            // 设置文件类型:
+            conn.setRequestProperty("contentType", "application/json");
+            // 开始连接请求
+            conn.connect();
+
+            OutputStream out = new DataOutputStream(conn.getOutputStream());
+            // 写入请求的字符串
+            out.write((paramJson.getBytes("UTF-8")));
+            out.flush();
+            out.close();
+
+            System.out.println(conn.getResponseCode());
+
+            // 请求返回的状态
+            if (HttpURLConnection.HTTP_OK == conn.getResponseCode()) {
+                // 请求返回的数据
+                InputStream in1 = conn.getInputStream();
+
+                try {
+                    String readLine;
+                    BufferedReader responseReader = new BufferedReader(new InputStreamReader(
+                            in1, "UTF-8"));
+
+                    while ((readLine = responseReader.readLine()) != null) {
+                        sb.append(readLine).append("\n");
+                    }
+
+                    responseReader.close();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            } else {
+                System.out.println("error++");
+            }
+        } catch (Exception ignored) {
+        }
+
+        return sb.toString();
+    }
+
+    /*public static String httpPostJson(String url, String content) throws UnsupportedEncodingException {
+        //返回body
+        String body = "";
+        //1、创建一个htt客户端
+        @SuppressWarnings("resource")
+        HttpClient httpClient=new DefaultHttpClient();
+        //2、创建一个HttpPost请求
+        HttpPost post = new HttpPost(url);
+        //使用addHeader方法添加请求头部,诸如User-Agent, Accept-Encoding等参数.
+
+        post.setHeader("Content-Type", "application/json;charset=UTF-8");
+        //组织数据
+        StringEntity se = new StringEntity(content);
+        //设置编码格式
+        se.setContentEncoding("UTF-8");
+        //设置数据类型
+        se.setContentType("application/json;charset=UTF-8");
+        //对于POST请求,把请求体填充进HttpPost实体.
+        post.setEntity(se);
+
+        //7、执行post请求操作，并拿到结果（同步阻塞）
+        CloseableHttpResponse httpResponse;
+        try {
+            httpResponse = (CloseableHttpResponse) httpClient.execute(post);
+            //获取结果实体
+            HttpEntity entity = httpResponse.getEntity();
+            if (entity != null) {
+                //按指定编码转换结果实体为String类型
+                body = EntityUtils.toString(entity, "utf-8");
+            }
+            EntityUtils.consume(entity);
+            //释放链接
+            httpResponse.close();
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return body;
+    }*/
 
     /**
      * 发送post请求，获取返回内容
      * @param url 请求地址
      * @param map 请求参数，map格式
-     * @param cookie 请求cookie
      * @return
      */
-    public static String httpPost(String url,Map<String,String> map,String cookie) {
+    public static String httpPostFormData(String url,Map<String,String> map) {
         //返回body
         String body = "";
         //1、创建一个htt客户端
@@ -197,14 +309,9 @@ public class HttpClientUtil {
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
-        System.out.println("请求地址："+url);
-        System.out.println("请求参数："+params.toString());
         //5、设置header信息
-        response.setHeader("Accept", "text/html, application/xhtml+xml, */*");
         response.setHeader("Content-Type", "application/x-www-form-urlencoded");
-        response.setHeader("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0))");
         //添加cookie到头文件
-        response.setHeader("Cookie", cookie);
 
         //6、设置编码
         //response.setEntity(new UrlEncodedFormEntity(params,HTTP.UTF_8));

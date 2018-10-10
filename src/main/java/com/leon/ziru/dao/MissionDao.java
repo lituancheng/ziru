@@ -84,4 +84,12 @@ public class MissionDao extends BaseDao {
                 .execute();
         return execute > 0;
     }
+
+    public boolean sendSuccess(Integer id){
+        int execute = ziruDsl.update(Tables.MISSION)
+                .set(Tables.MISSION.EMAIL_STATUS, 1)
+                .where(Tables.MISSION.ID.eq(id))
+                .execute();
+        return execute > 0;
+    }
 }

@@ -23,21 +23,23 @@ public class MissionController {
     @RequestMapping("add")
     public Respond add(@RequestParam(value = "sourceUrl") String sourceUrl,
                        @RequestParam(value = "email") String email,
+                       @RequestParam(value = "formId", required = false) String formId,
                        @RequestParam(value = "token") String token) throws Exception {
         if(StringUtils.isEmpty(sourceUrl) || StringUtils.isEmpty(email))
             throw new BusinessException(BusinessError.GENENRAL, "请填写完毕再提交任务");
-        Mission mission = missionService.saveMission(sourceUrl, email, null, token);
+        Mission mission = missionService.saveMission(sourceUrl, email, formId, null, token);
         return new Respond(mission);
     }
 
     @RequestMapping("update")
     public Respond add(@RequestParam(value = "sourceUrl") String sourceUrl,
                        @RequestParam(value = "email") String email,
+                       @RequestParam(value = "formId", required = false) String formId,
                        @RequestParam(value = "id") Integer id,
                        @RequestParam(value = "token") String token) throws Exception {
         if(StringUtils.isEmpty(sourceUrl) || StringUtils.isEmpty(email))
             throw new BusinessException(BusinessError.GENENRAL, "请填写完毕再提交任务");
-        Mission mission = missionService.saveMission(sourceUrl, email, id, token);
+        Mission mission = missionService.saveMission(sourceUrl, email, formId, id, token);
         return new Respond(mission);
     }
 

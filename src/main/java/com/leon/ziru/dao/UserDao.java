@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDao extends BaseDao {
 
+    public User get(Integer id){
+        return ziruDsl.selectFrom(Tables.USER).where(Tables.USER.ID.eq(id)).fetchOneInto(User.class);
+    }
+
     public User getByOpenId(String openId){
         return ziruDsl.selectFrom(Tables.USER).where(Tables.USER.OPEN_ID.eq(openId)).fetchOneInto(User.class);
     }

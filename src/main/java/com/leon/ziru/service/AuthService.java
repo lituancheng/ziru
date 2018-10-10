@@ -26,6 +26,8 @@ public class AuthService {
         try {
             LoginResp loginResp = HttpClientUtil.httpGet(String.format(CODE_2_SESSION, APPID, SECRET, code), LoginResp.class);
             String openid = loginResp.openid;
+            if(StringUtils.isEmpty(openid))
+                throw new BusinessException(BusinessError.GENENRAL, "登录状态异常，请稍后重试");
             Integer userId;
             User user = userService.getByOpenId(openid);
             if(user == null){

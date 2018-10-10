@@ -1,5 +1,6 @@
 package com.leon.ziru.mail;
 
+import com.leon.ziru.dao.MissionDao;
 import com.leon.ziru.log.ZRLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,9 @@ public class Mailer {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Autowired
+    private MissionDao missionDao;
+
     @Value("${spring.mail.from}")
     private String from;
 
@@ -33,7 +37,7 @@ public class Mailer {
      * @param text    正文
      */
     @Async
-    public void sendSimpleMail(String subject, String text, String to) {
+    public void sendSimpleMail(String subject, String text, String to, Integer missionId) {
         SimpleMailMessage message;
         try {
             message = new SimpleMailMessage();
@@ -42,6 +46,7 @@ public class Mailer {
             message.setSubject(subject);
             message.setText(text);
             mailSender.send(message);
+            missionDao.sendSuccess(missionId);
         } catch (MailException e) {
             ZRLogger.errorLog.error("sendMailError", e);
         }
@@ -54,7 +59,7 @@ public class Mailer {
      * @param text    正文
      */
     @Async
-    public void sendHtmlMail(String subject, String text, String to) {
+    public void sendHtmlMail(String subject, String text, String to, Integer missionId) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false);
@@ -63,6 +68,7 @@ public class Mailer {
             helper.setSubject(subject);
             helper.setText(text, true);
             mailSender.send(message);
+            missionDao.sendSuccess(missionId);
         } catch (MailException | MessagingException e) {
             ZRLogger.errorLog.error("sendMailError", e);
         }

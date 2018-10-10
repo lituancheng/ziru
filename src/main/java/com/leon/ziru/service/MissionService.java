@@ -4,15 +4,19 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.leon.ziru.dao.MissionDao;
+import com.leon.ziru.dao.UserDao;
 import com.leon.ziru.exception.BusinessError;
 import com.leon.ziru.exception.BusinessException;
 import com.leon.ziru.log.ZRLogger;
 import com.leon.ziru.mail.Mailer;
+import com.leon.ziru.model.AccessTokenResp;
 import com.leon.ziru.model.RoomDetailResp;
 import com.leon.ziru.model.RoomDetailResp.RoomDetailData;
 import com.leon.ziru.model.consts.CityCode;
+import com.leon.ziru.model.send_temp.SendTemplateReq;
 import com.leon.ziru.model.session.SessionUser;
 import com.leon.ziru.model.ziru.tables.pojos.Mission;
+import com.leon.ziru.model.ziru.tables.pojos.User;
 import com.leon.ziru.util.HttpClientUtil;
 import com.leon.ziru.util.SessionUtil;
 import org.jooq.tools.StringUtils;
@@ -20,20 +24,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.leon.ziru.model.consts.WxKeys.APPID;
+import static com.leon.ziru.model.consts.WxKeys.SECRET;
+
 @Service
 public class MissionService {
 
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
+
     private static final String EMAIL_PATTERN = "^([\\w-_]+(?:\\.[\\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\\.[a-z]{2,6})$";
     private static final String ZR_DETAIL_PATTERN = "https?://m\\.ziroom.com/(.*?)/room\\?id=([0-9]+).*";
     private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/v7/room/detail.json?city_code=%s&id=%s";
+    private static final String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID +"&secret=" + SECRET;
+    private static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
 
     //dzz 可入住 ycz 已入住 yxd 已預定 zxpzz 配置中 tzpzz 配置中
     private HashMap<String, Integer> statusMap = new HashMap<String, Integer>(){
@@ -52,6 +65,9 @@ public class MissionService {
     @Autowired
     private MissionDao missionDao;
 
+    @Autowired
+    private UserDao userDao;
+
     public Mission get(Integer id){
         return missionDao.get(id);
     }
@@ -61,7 +77,7 @@ public class MissionService {
         return missionDao.getList(userId);
     }
 
-    public Mission saveMission(String sourceUrl, String email, Integer id, String token) throws Exception {
+    public Mission saveMission(String sourceUrl, String email, String formId, Integer id, String token) throws Exception {
         Integer userId = SessionUtil.getUserId(token);
         if(id == null){ //新增
             List<Mission> enableList = missionDao.getEnableList(userId);
@@ -91,6 +107,7 @@ public class MissionService {
         mission.setSourceUrl(sourceUrl);
         mission.setUserId(userId);
         mission.setEmail(email);
+        mission.setFormId(formId);
         if(id == null){
             missionDao.insert(mission);
         }else {
@@ -146,10 +163,30 @@ public class MissionService {
                 Integer status = statusMap.get(detail.status);
                 if(!status.equals(m.getRoomStatus())){    //房源状态改变了
                     mailer.sendSimpleMail("自如抢房通知",
-                            "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail());
+                            "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail(), m.getId());
                     m.setRoomStatus(status);
                     missionDao.update(m);
                     missionDao.setClose(m.getId());
+
+                    AccessTokenResp accessTokenResp = HttpClientUtil.httpGet(GET_ACCESS_TOKEN_URL, AccessTokenResp.class);
+                    if(accessTokenResp.errcode == 0) {
+                        String sendUrl = SEND_TEMPLATE_URL + accessTokenResp.access_token;
+                        if(!StringUtils.isEmpty(m.getFormId())) {
+                            User user = userDao.get(m.getUserId());
+                            SendTemplateReq req = new SendTemplateReq();
+                            req.touser = user.getOpenId();
+                            req.template_id = "WwDXdcsgyYQ6iF13WsuPHKJ1Uda_GQ7r0amFEuwNuJg";
+                            req.page = "/pages/index/index";
+                            req.form_id = m.getFormId();
+                            SendTemplateReq.Data data = new SendTemplateReq.Data();
+                            data.keyword1 = new SendTemplateReq.Data.Keyword("您监控的房源状态有变化啦");
+                            data.keyword2 = new SendTemplateReq.Data.Keyword(sdf.format(new Date()));
+                            data.keyword3 = new SendTemplateReq.Data.Keyword("请尽快登录自如App，准备进行后续操作");
+                            data.keyword4 = new SendTemplateReq.Data.Keyword(m.getRoomName());
+                            req.data = data;
+                            HttpClientUtil.httpPostJson(sendUrl, gson.toJson(req));
+                        }
+                    }
                 }
             } catch (Exception e) {
                 ZRLogger.errorLog.error("monitoring Exception:", e);

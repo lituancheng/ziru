@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission extends TableImpl<MissionRecord> {
 
-    private static final long serialVersionUID = 304495740;
+    private static final long serialVersionUID = -898381959;
 
     /**
      * The reference instance of <code>mission</code>
@@ -116,9 +116,19 @@ public class Mission extends TableImpl<MissionRecord> {
     public final TableField<MissionRecord, String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "通知邮箱");
 
     /**
+     * The column <code>mission.form_id</code>.
+     */
+    public final TableField<MissionRecord, String> FORM_ID = createField("form_id", org.jooq.impl.SQLDataType.VARCHAR(64), this, "");
+
+    /**
      * The column <code>mission.status</code>. -1 已删除 0 运行中 1 已停止
      */
     public final TableField<MissionRecord, Integer> STATUS = createField("status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "-1 已删除 0 运行中 1 已停止");
+
+    /**
+     * The column <code>mission.email_status</code>. 0 未发送邮件 1 已发送
+     */
+    public final TableField<MissionRecord, Integer> EMAIL_STATUS = createField("email_status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "0 未发送邮件 1 已发送");
 
     /**
      * The column <code>mission.create_time</code>.
