@@ -161,7 +161,7 @@ public class MissionService {
         for(Mission m : missionList){
             try {
                 RoomDetailData detail = getDetail(m.getSourceUrl());
-                ZRLogger.infoLog.info(m.getRoomName() + "：" + gson.toJson(detail));
+                ZRLogger.infoLog.info(m.getRoomName() + "：" + detail.status);
                 Integer status = statusMap.get(detail.status);
                 if(!status.equals(m.getRoomStatus())){    //房源状态改变了
                     mailer.sendSimpleMail("自如抢房通知",
