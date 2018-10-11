@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission extends TableImpl<MissionRecord> {
 
-    private static final long serialVersionUID = -898381959;
+    private static final long serialVersionUID = -14082516;
 
     /**
      * The reference instance of <code>mission</code>
@@ -129,6 +129,16 @@ public class Mission extends TableImpl<MissionRecord> {
      * The column <code>mission.email_status</code>. 0 未发送邮件 1 已发送
      */
     public final TableField<MissionRecord, Integer> EMAIL_STATUS = createField("email_status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "0 未发送邮件 1 已发送");
+
+    /**
+     * The column <code>mission.template_status</code>. 0 未发送模板 1 已发送
+     */
+    public final TableField<MissionRecord, Integer> TEMPLATE_STATUS = createField("template_status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "0 未发送模板 1 已发送");
+
+    /**
+     * The column <code>mission.sms_status</code>. 0 未发送短信 1 已发送
+     */
+    public final TableField<MissionRecord, Integer> SMS_STATUS = createField("sms_status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "0 未发送短信 1 已发送");
 
     /**
      * The column <code>mission.create_time</code>.

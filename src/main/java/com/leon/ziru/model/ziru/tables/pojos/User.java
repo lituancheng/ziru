@@ -23,9 +23,10 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User implements Serializable {
 
-    private static final long serialVersionUID = -1442315952;
+    private static final long serialVersionUID = -2121337846;
 
     private Integer   id;
+    private String    phone;
     private String    nickName;
     private String    openId;
     private Integer   gender;
@@ -39,6 +40,7 @@ public class User implements Serializable {
 
     public User(User value) {
         this.id = value.id;
+        this.phone = value.phone;
         this.nickName = value.nickName;
         this.openId = value.openId;
         this.gender = value.gender;
@@ -51,6 +53,7 @@ public class User implements Serializable {
 
     public User(
         Integer   id,
+        String    phone,
         String    nickName,
         String    openId,
         Integer   gender,
@@ -61,6 +64,7 @@ public class User implements Serializable {
         Timestamp updateTime
     ) {
         this.id = id;
+        this.phone = phone;
         this.nickName = nickName;
         this.openId = openId;
         this.gender = gender;
@@ -77,6 +81,14 @@ public class User implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getNickName() {
@@ -148,6 +160,7 @@ public class User implements Serializable {
         StringBuilder sb = new StringBuilder("User (");
 
         sb.append(id);
+        sb.append(", ").append(phone);
         sb.append(", ").append(nickName);
         sb.append(", ").append(openId);
         sb.append(", ").append(gender);

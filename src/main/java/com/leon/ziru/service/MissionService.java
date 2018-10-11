@@ -19,7 +19,7 @@ import com.leon.ziru.model.ziru.tables.pojos.Mission;
 import com.leon.ziru.model.ziru.tables.pojos.User;
 import com.leon.ziru.util.HttpClientUtil;
 import com.leon.ziru.util.SessionUtil;
-import org.jooq.tools.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -61,6 +61,9 @@ public class MissionService {
 
     @Autowired
     private Mailer mailer;
+
+    @Autowired
+    private SmsService smsService;
 
     @Autowired
     private MissionDao missionDao;
@@ -164,6 +167,7 @@ public class MissionService {
                 ZRLogger.infoLog.info(m.getRoomName() + "：" + detail.status);
                 Integer status = statusMap.get(detail.status);
                 if(!status.equals(m.getRoomStatus())){    //房源状态改变了
+                    //邮件
                     mailer.sendSimpleMail("自如抢房通知",
                             "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail(), m.getId());
                     m.setRoomStatus(status);
@@ -173,10 +177,12 @@ public class MissionService {
                     if(accessTokenResp == null)
                         accessTokenResp = HttpClientUtil.httpGet(GET_ACCESS_TOKEN_URL, AccessTokenResp.class);
 
+                    User user = userDao.get(m.getUserId());
+
+                    //服务模板
                     if(accessTokenResp.errcode == 0) {
                         String sendUrl = SEND_TEMPLATE_URL + accessTokenResp.access_token;
-                        if(!StringUtils.isEmpty(m.getFormId())) {
-                            User user = userDao.get(m.getUserId());
+                        if(StringUtils.isNotEmpty(m.getFormId())) {
                             SendTemplateReq req = new SendTemplateReq();
                             req.touser = user.getOpenId();
                             req.template_id = "WwDXdcsgyYQ6iF13WsuPHKJ1Uda_GQ7r0amFEuwNuJg";
@@ -188,8 +194,15 @@ public class MissionService {
                             data.keyword3 = new SendTemplateReq.Data.Keyword("请尽快登录自如App，准备进行后续操作");
                             data.keyword4 = new SendTemplateReq.Data.Keyword(m.getRoomName());
                             req.data = data;
-                            HttpClientUtil.httpPostJson(sendUrl, gson.toJson(req));
+                            String resp = HttpClientUtil.httpPostJson(sendUrl, gson.toJson(req));
+                            if(StringUtils.isNotEmpty(resp))
+                                missionDao.sendTemplateSuccess(m.getId());
                         }
+                    }
+
+                    //短信
+                    if(StringUtils.isNotEmpty(user.getPhone())){
+                        smsService.send(user.getPhone(), m.getId());
                     }
                 }
             } catch (Exception e) {

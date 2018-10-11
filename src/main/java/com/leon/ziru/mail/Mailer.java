@@ -46,7 +46,7 @@ public class Mailer {
             message.setSubject(subject);
             message.setText(text);
             mailSender.send(message);
-            missionDao.sendSuccess(missionId);
+            missionDao.sendEmailSuccess(missionId);
         } catch (MailException e) {
             ZRLogger.errorLog.error("sendMailError", e);
         }
@@ -68,7 +68,7 @@ public class Mailer {
             helper.setSubject(subject);
             helper.setText(text, true);
             mailSender.send(message);
-            missionDao.sendSuccess(missionId);
+            missionDao.sendEmailSuccess(missionId);
         } catch (MailException | MessagingException e) {
             ZRLogger.errorLog.error("sendMailError", e);
         }

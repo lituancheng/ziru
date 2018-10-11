@@ -14,9 +14,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("get_phone")
+    public Respond getPhone(@RequestParam(value = "token") String token){
+        String phone = userService.getPhone(token);
+        Respond respond = new Respond();
+        respond.setData(phone);
+        return respond;
+    }
+
     @RequestMapping("bind_phone")
     public Respond bindPhone(@RequestParam(value = "token") String token, @RequestParam(value = "phone") String phone){
-        boolean b = userService.bindPhone(token, phone);
-        return new Respond(b);
+        boolean result = userService.bindPhone(token, phone);
+        return new Respond(result);
     }
 }

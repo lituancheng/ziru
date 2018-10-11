@@ -24,4 +24,12 @@ public class UserDao extends BaseDao {
         UserRecord result = ziruDsl.insertInto(Tables.USER).set(userRecord).returning(Tables.USER.ID).fetchOne();
         return result.getId();
     }
+
+    public boolean bindPhone(Integer id, String phone){
+        int execute = ziruDsl.update(Tables.USER)
+                .set(Tables.USER.PHONE, phone)
+                .where(Tables.USER.ID.eq(id))
+                .execute();
+        return execute > 0;
+    }
 }

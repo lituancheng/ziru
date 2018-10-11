@@ -85,9 +85,25 @@ public class MissionDao extends BaseDao {
         return execute > 0;
     }
 
-    public boolean sendSuccess(Integer id){
+    public boolean sendEmailSuccess(Integer id){
         int execute = ziruDsl.update(Tables.MISSION)
                 .set(Tables.MISSION.EMAIL_STATUS, 1)
+                .where(Tables.MISSION.ID.eq(id))
+                .execute();
+        return execute > 0;
+    }
+
+    public boolean sendTemplateSuccess(Integer id){
+        int execute = ziruDsl.update(Tables.MISSION)
+                .set(Tables.MISSION.TEMPLATE_STATUS, 1)
+                .where(Tables.MISSION.ID.eq(id))
+                .execute();
+        return execute > 0;
+    }
+
+    public boolean sendSmsSuccess(Integer id){
+        int execute = ziruDsl.update(Tables.MISSION)
+                .set(Tables.MISSION.SMS_STATUS, 1)
                 .where(Tables.MISSION.ID.eq(id))
                 .execute();
         return execute > 0;
