@@ -1,5 +1,7 @@
 package com.leon.ziru.model;
 
+import org.jooq.tools.json.JSONObject;
+
 import java.util.List;
 
 public class RoomDetailResp {
@@ -24,6 +26,9 @@ public class RoomDetailResp {
         public Integer is_reserve;
         public MiniProgramShare miniprogram_share;
         public String subway_primary;   //距地铁距离
+        public List<String> photos_big;
+        public JSONObject banner;
+        public String sign_date;
         public String status;   //dzz 可入住 ycz 已入住 yxd 已預定 zxpzz 配置中 tzpzz 配置中
         public String will_unrent_date;   //预计释放房源时间，dzz且此字段为空的话说明已释放，dzz不为空说明待释放
 
@@ -31,6 +36,12 @@ public class RoomDetailResp {
             public String name;
             public String icon;
             public Integer num;
+        }
+
+        public static class Banner{
+            public String link;
+            public String photo;
+            public String title;
         }
 
         public static class MiniProgramShare{

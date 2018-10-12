@@ -90,8 +90,7 @@ public class MissionService {
         if(!Pattern.matches(EMAIL_PATTERN, email))
             throw new BusinessException(BusinessError.GENENRAL, "邮箱格式不正确");
         RoomDetailData detail = getDetail(sourceUrl);
-        if(detail.status.equals("zxpzz") || detail.status.equals("tzpzz")
-                || (detail.status.equals("dzz") && !StringUtils.isBlank(detail.will_unrent_date))){
+        if(detail.status.equals("zxpzz") || detail.status.equals("tzpzz")){
         }else {
             throw new BusinessException(BusinessError.GENENRAL, "只有配置中和待释放的房源可以监控");
         }
@@ -106,6 +105,7 @@ public class MissionService {
         mission.setFloor(detail.floor);
         mission.setFloorTotal(detail.floor_total);
         mission.setSubwayPrimary(detail.subway_primary);
+        mission.setImgUrl(getImgUrl(detail));
         mission.setRoomStatus(statusMap.get(detail.status));
         mission.setSourceUrl(sourceUrl);
         mission.setUserId(userId);
@@ -154,19 +154,35 @@ public class MissionService {
         return missionDao.delete(id);
     }
 
+    private String getImgUrl(RoomDetailData detail){
+        String imgUrl = "";
+        try {
+            if(detail.status.equals("zxpzz")){
+                imgUrl = detail.banner.get("photo").toString();
+            }else if(detail.status.equals("tzpzz")){
+                imgUrl = detail.photos_big.get(0);
+            }
+        } catch (Exception e) {
+            ZRLogger.errorLog.error("Ex:", e);
+        }
+        return imgUrl;
+    }
+
     /**
-     * 每隔30分钟监测一波房源变化
+     * 每隔5分钟监测一波房源变化
      */
-    @Scheduled(cron = "0 0/30 *  * * ? ")
+    @Scheduled(cron = "0 0/5 *  * * ? ")
     public void monitoring() {
         AccessTokenResp accessTokenResp = null;
         List<Mission> missionList = missionDao.getAllEnableList();
         for(Mission m : missionList){
             try {
                 RoomDetailData detail = getDetail(m.getSourceUrl());
-                ZRLogger.infoLog.info(m.getRoomName() + "：" + detail.status);
+                ZRLogger.infoLog.info(m.getRoomName() + "：" + detail.status + ":" + detail.will_unrent_date);
+                String imgUrl = getImgUrl(detail);
                 Integer status = statusMap.get(detail.status);
-                if(!status.equals(m.getRoomStatus())){    //房源状态改变了
+                if(!imgUrl.equals(m.getImgUrl()) || !status.equals(m.getRoomStatus())
+                        || StringUtils.isNotEmpty(detail.will_unrent_date.trim())){    //房源状态改变了
                     //邮件
                     mailer.sendSimpleMail("自如抢房通知",
                             "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail(), m.getId());

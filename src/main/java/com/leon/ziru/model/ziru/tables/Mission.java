@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission extends TableImpl<MissionRecord> {
 
-    private static final long serialVersionUID = -14082516;
+    private static final long serialVersionUID = -978321933;
 
     /**
      * The reference instance of <code>mission</code>
@@ -63,7 +63,7 @@ public class Mission extends TableImpl<MissionRecord> {
     /**
      * The column <code>mission.source_url</code>. 房源链接
      */
-    public final TableField<MissionRecord, String> SOURCE_URL = createField("source_url", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "房源链接");
+    public final TableField<MissionRecord, String> SOURCE_URL = createField("source_url", org.jooq.impl.SQLDataType.VARCHAR(256).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "房源链接");
 
     /**
      * The column <code>mission.user_id</code>.
@@ -73,7 +73,7 @@ public class Mission extends TableImpl<MissionRecord> {
     /**
      * The column <code>mission.room_name</code>. 房源名称
      */
-    public final TableField<MissionRecord, String> ROOM_NAME = createField("room_name", org.jooq.impl.SQLDataType.VARCHAR(128).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "房源名称");
+    public final TableField<MissionRecord, String> ROOM_NAME = createField("room_name", org.jooq.impl.SQLDataType.VARCHAR(256).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "房源名称");
 
     /**
      * The column <code>mission.bed_room_count</code>. 卧室数量
@@ -106,6 +106,11 @@ public class Mission extends TableImpl<MissionRecord> {
     public final TableField<MissionRecord, String> SUBWAY_PRIMARY = createField("subway_primary", org.jooq.impl.SQLDataType.VARCHAR(128), this, "距地铁距离信息");
 
     /**
+     * The column <code>mission.img_url</code>.
+     */
+    public final TableField<MissionRecord, String> IMG_URL = createField("img_url", org.jooq.impl.SQLDataType.VARCHAR(512), this, "");
+
+    /**
      * The column <code>mission.room_status</code>. 房屋状态
      */
     public final TableField<MissionRecord, Integer> ROOM_STATUS = createField("room_status", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "房屋状态");
@@ -113,12 +118,12 @@ public class Mission extends TableImpl<MissionRecord> {
     /**
      * The column <code>mission.email</code>. 通知邮箱
      */
-    public final TableField<MissionRecord, String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "通知邮箱");
+    public final TableField<MissionRecord, String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "通知邮箱");
 
     /**
      * The column <code>mission.form_id</code>.
      */
-    public final TableField<MissionRecord, String> FORM_ID = createField("form_id", org.jooq.impl.SQLDataType.VARCHAR(64), this, "");
+    public final TableField<MissionRecord, String> FORM_ID = createField("form_id", org.jooq.impl.SQLDataType.VARCHAR(128), this, "");
 
     /**
      * The column <code>mission.status</code>. -1 已删除 0 运行中 1 已停止
