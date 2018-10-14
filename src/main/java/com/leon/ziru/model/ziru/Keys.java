@@ -4,8 +4,10 @@
 package com.leon.ziru.model.ziru;
 
 
+import com.leon.ziru.model.ziru.tables.Advice;
 import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
+import com.leon.ziru.model.ziru.tables.records.AdviceRecord;
 import com.leon.ziru.model.ziru.tables.records.MissionRecord;
 import com.leon.ziru.model.ziru.tables.records.UserRecord;
 
@@ -34,6 +36,7 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<AdviceRecord, Integer> IDENTITY_ADVICE = Identities0.IDENTITY_ADVICE;
     public static final Identity<MissionRecord, Integer> IDENTITY_MISSION = Identities0.IDENTITY_MISSION;
     public static final Identity<UserRecord, Integer> IDENTITY_USER = Identities0.IDENTITY_USER;
 
@@ -41,6 +44,7 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<AdviceRecord> KEY_ADVICE_PRIMARY = UniqueKeys0.KEY_ADVICE_PRIMARY;
     public static final UniqueKey<MissionRecord> KEY_MISSION_PRIMARY = UniqueKeys0.KEY_MISSION_PRIMARY;
     public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = UniqueKeys0.KEY_USER_PRIMARY;
 
@@ -54,11 +58,13 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     private static class Identities0 extends AbstractKeys {
+        public static Identity<AdviceRecord, Integer> IDENTITY_ADVICE = createIdentity(Advice.ADVICE, Advice.ADVICE.ID);
         public static Identity<MissionRecord, Integer> IDENTITY_MISSION = createIdentity(Mission.MISSION, Mission.MISSION.ID);
         public static Identity<UserRecord, Integer> IDENTITY_USER = createIdentity(User.USER, User.USER.ID);
     }
 
     private static class UniqueKeys0 extends AbstractKeys {
+        public static final UniqueKey<AdviceRecord> KEY_ADVICE_PRIMARY = createUniqueKey(Advice.ADVICE, "KEY_advice_PRIMARY", Advice.ADVICE.ID);
         public static final UniqueKey<MissionRecord> KEY_MISSION_PRIMARY = createUniqueKey(Mission.MISSION, "KEY_mission_PRIMARY", Mission.MISSION.ID);
         public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = createUniqueKey(User.USER, "KEY_user_PRIMARY", User.USER.ID);
     }

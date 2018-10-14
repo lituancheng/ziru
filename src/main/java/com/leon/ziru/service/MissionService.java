@@ -202,12 +202,12 @@ public class MissionService {
                             SendTemplateReq req = new SendTemplateReq();
                             req.touser = user.getOpenId();
                             req.template_id = "WwDXdcsgyYQ6iF13WsuPHKJ1Uda_GQ7r0amFEuwNuJg";
-                            req.page = "/pages/index/index";
+                            req.page = "pages/index/index";
                             req.form_id = m.getFormId();
                             SendTemplateReq.Data data = new SendTemplateReq.Data();
                             data.keyword1 = new SendTemplateReq.Data.Keyword("您监控的房源状态有变化啦");
                             data.keyword2 = new SendTemplateReq.Data.Keyword(sdf.format(new Date()));
-                            data.keyword3 = new SendTemplateReq.Data.Keyword("请尽快登录自如App，准备进行后续操作");
+                            data.keyword3 = new SendTemplateReq.Data.Keyword("如您觉得小程序好用，欢迎打赏转账任意金额给支付宝账户#15737318363#");
                             data.keyword4 = new SendTemplateReq.Data.Keyword(m.getRoomName());
                             req.data = data;
                             String resp = HttpClientUtil.httpPostJson(sendUrl, gson.toJson(req));
