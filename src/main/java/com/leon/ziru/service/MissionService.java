@@ -154,18 +154,20 @@ public class MissionService {
         return missionDao.delete(id);
     }
 
-    private String getImgUrl(RoomDetailData detail){
-        String imgUrl = "";
+    private String getImgUrl(RoomDetailData detail) throws BusinessException{
+        String imgUrl = null;
         try {
-            if(detail.status.equals("zxpzz")){
+            if(detail.status.equals("zxpzz"))
                 imgUrl = detail.banner.get("photo").toString();
-            }else if(detail.status.equals("tzpzz")){
+            else if(detail.status.equals("tzpzz"))
                 imgUrl = detail.photos_big.get(0);
-            }
         } catch (Exception e) {
             ZRLogger.errorLog.error("Ex:", e);
         }
-        return imgUrl;
+        if(StringUtils.isNotEmpty(imgUrl))
+            return imgUrl;
+        else
+            throw new BusinessException(BusinessError.GENENRAL, "解析异常");
     }
 
     /**
