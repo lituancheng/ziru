@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission extends TableImpl<MissionRecord> {
 
-    private static final long serialVersionUID = -978321933;
+    private static final long serialVersionUID = 738908901;
 
     /**
      * The reference instance of <code>mission</code>
@@ -74,41 +74,6 @@ public class Mission extends TableImpl<MissionRecord> {
      * The column <code>mission.room_name</code>. 房源名称
      */
     public final TableField<MissionRecord, String> ROOM_NAME = createField("room_name", org.jooq.impl.SQLDataType.VARCHAR(256).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "房源名称");
-
-    /**
-     * The column <code>mission.bed_room_count</code>. 卧室数量
-     */
-    public final TableField<MissionRecord, Integer> BED_ROOM_COUNT = createField("bed_room_count", org.jooq.impl.SQLDataType.INTEGER, this, "卧室数量");
-
-    /**
-     * The column <code>mission.room_no</code>. 卧室编号
-     */
-    public final TableField<MissionRecord, String> ROOM_NO = createField("room_no", org.jooq.impl.SQLDataType.VARCHAR(16).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "卧室编号");
-
-    /**
-     * The column <code>mission.face</code>. 朝向
-     */
-    public final TableField<MissionRecord, String> FACE = createField("face", org.jooq.impl.SQLDataType.VARCHAR(16).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "朝向");
-
-    /**
-     * The column <code>mission.floor</code>. 层数
-     */
-    public final TableField<MissionRecord, Integer> FLOOR = createField("floor", org.jooq.impl.SQLDataType.INTEGER, this, "层数");
-
-    /**
-     * The column <code>mission.floor_total</code>. 总层数
-     */
-    public final TableField<MissionRecord, Integer> FLOOR_TOTAL = createField("floor_total", org.jooq.impl.SQLDataType.INTEGER, this, "总层数");
-
-    /**
-     * The column <code>mission.subway_primary</code>. 距地铁距离信息
-     */
-    public final TableField<MissionRecord, String> SUBWAY_PRIMARY = createField("subway_primary", org.jooq.impl.SQLDataType.VARCHAR(128), this, "距地铁距离信息");
-
-    /**
-     * The column <code>mission.img_url</code>.
-     */
-    public final TableField<MissionRecord, String> IMG_URL = createField("img_url", org.jooq.impl.SQLDataType.VARCHAR(512), this, "");
 
     /**
      * The column <code>mission.room_status</code>. 房屋状态

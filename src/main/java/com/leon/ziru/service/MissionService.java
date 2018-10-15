@@ -48,7 +48,7 @@ public class MissionService {
     private static final String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID +"&secret=" + SECRET;
     private static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
 
-    //dzz 可入住 ycz 已入住 yxd 已預定 zxpzz 配置中 tzpzz 配置中
+    //dzz 可入住 ycz 已入住 yxd 已預定 zxpzz 配置中 tzpzz 配置中 sfz 倒计时中
     private HashMap<String, Integer> statusMap = new HashMap<String, Integer>(){
         {
             put("dzz", 1);
@@ -56,6 +56,7 @@ public class MissionService {
             put("yxd", 3);
             put("zxpzz", 4);
             put("tzpzz", 4);
+            put("sfz", 5);
         }
     };
 
@@ -99,13 +100,6 @@ public class MissionService {
             throw new BusinessException(BusinessError.GENENRAL, "该任务已存在，请不要重复创建");
         Mission mission = new Mission();
         mission.setRoomName(detail.name);
-        mission.setBedRoomCount(detail.bedroom);
-        mission.setRoomNo(detail.index_no);
-        mission.setFace(detail.face);
-        mission.setFloor(detail.floor);
-        mission.setFloorTotal(detail.floor_total);
-        mission.setSubwayPrimary(detail.subway_primary);
-        mission.setImgUrl(getImgUrl(detail));
         mission.setRoomStatus(statusMap.get(detail.status));
         mission.setSourceUrl(sourceUrl);
         mission.setUserId(userId);
@@ -154,22 +148,6 @@ public class MissionService {
         return missionDao.delete(id);
     }
 
-    private String getImgUrl(RoomDetailData detail) throws BusinessException{
-        String imgUrl = null;
-        try {
-            if(detail.status.equals("zxpzz"))
-                imgUrl = detail.banner.get("photo").toString();
-            else if(detail.status.equals("tzpzz"))
-                imgUrl = detail.photos_big.get(0);
-        } catch (Exception e) {
-            ZRLogger.errorLog.error("Ex:", e);
-        }
-        if(StringUtils.isNotEmpty(imgUrl))
-            return imgUrl;
-        else
-            throw new BusinessException(BusinessError.GENENRAL, "解析异常");
-    }
-
     /**
      * 每隔5分钟监测一波房源变化
      */
@@ -180,11 +158,9 @@ public class MissionService {
         for(Mission m : missionList){
             try {
                 RoomDetailData detail = getDetail(m.getSourceUrl());
-                ZRLogger.infoLog.info(m.getRoomName() + "：" + detail.status + ":" + detail.will_unrent_date);
-                String imgUrl = getImgUrl(detail);
+                ZRLogger.infoLog.info(m.getRoomName() + "：" + detail.status);
                 Integer status = statusMap.get(detail.status);
-                if(!imgUrl.equals(m.getImgUrl()) || !status.equals(m.getRoomStatus())
-                        || StringUtils.isNotEmpty(detail.will_unrent_date.trim())){    //房源状态改变了
+                if(!status.equals(m.getRoomStatus())){    //房源状态改变了
                     //邮件
                     mailer.sendSimpleMail("自如抢房通知",
                             "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail(), m.getId());

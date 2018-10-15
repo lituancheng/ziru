@@ -23,19 +23,12 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission implements Serializable {
 
-    private static final long serialVersionUID = -1370871751;
+    private static final long serialVersionUID = -332760494;
 
     private Integer   id;
     private String    sourceUrl;
     private Integer   userId;
     private String    roomName;
-    private Integer   bedRoomCount;
-    private String    roomNo;
-    private String    face;
-    private Integer   floor;
-    private Integer   floorTotal;
-    private String    subwayPrimary;
-    private String    imgUrl;
     private Integer   roomStatus;
     private String    email;
     private String    formId;
@@ -53,13 +46,6 @@ public class Mission implements Serializable {
         this.sourceUrl = value.sourceUrl;
         this.userId = value.userId;
         this.roomName = value.roomName;
-        this.bedRoomCount = value.bedRoomCount;
-        this.roomNo = value.roomNo;
-        this.face = value.face;
-        this.floor = value.floor;
-        this.floorTotal = value.floorTotal;
-        this.subwayPrimary = value.subwayPrimary;
-        this.imgUrl = value.imgUrl;
         this.roomStatus = value.roomStatus;
         this.email = value.email;
         this.formId = value.formId;
@@ -76,13 +62,6 @@ public class Mission implements Serializable {
         String    sourceUrl,
         Integer   userId,
         String    roomName,
-        Integer   bedRoomCount,
-        String    roomNo,
-        String    face,
-        Integer   floor,
-        Integer   floorTotal,
-        String    subwayPrimary,
-        String    imgUrl,
         Integer   roomStatus,
         String    email,
         String    formId,
@@ -97,13 +76,6 @@ public class Mission implements Serializable {
         this.sourceUrl = sourceUrl;
         this.userId = userId;
         this.roomName = roomName;
-        this.bedRoomCount = bedRoomCount;
-        this.roomNo = roomNo;
-        this.face = face;
-        this.floor = floor;
-        this.floorTotal = floorTotal;
-        this.subwayPrimary = subwayPrimary;
-        this.imgUrl = imgUrl;
         this.roomStatus = roomStatus;
         this.email = email;
         this.formId = formId;
@@ -145,62 +117,6 @@ public class Mission implements Serializable {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
-    }
-
-    public Integer getBedRoomCount() {
-        return this.bedRoomCount;
-    }
-
-    public void setBedRoomCount(Integer bedRoomCount) {
-        this.bedRoomCount = bedRoomCount;
-    }
-
-    public String getRoomNo() {
-        return this.roomNo;
-    }
-
-    public void setRoomNo(String roomNo) {
-        this.roomNo = roomNo;
-    }
-
-    public String getFace() {
-        return this.face;
-    }
-
-    public void setFace(String face) {
-        this.face = face;
-    }
-
-    public Integer getFloor() {
-        return this.floor;
-    }
-
-    public void setFloor(Integer floor) {
-        this.floor = floor;
-    }
-
-    public Integer getFloorTotal() {
-        return this.floorTotal;
-    }
-
-    public void setFloorTotal(Integer floorTotal) {
-        this.floorTotal = floorTotal;
-    }
-
-    public String getSubwayPrimary() {
-        return this.subwayPrimary;
-    }
-
-    public void setSubwayPrimary(String subwayPrimary) {
-        this.subwayPrimary = subwayPrimary;
-    }
-
-    public String getImgUrl() {
-        return this.imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
     }
 
     public Integer getRoomStatus() {
@@ -283,13 +199,6 @@ public class Mission implements Serializable {
         sb.append(", ").append(sourceUrl);
         sb.append(", ").append(userId);
         sb.append(", ").append(roomName);
-        sb.append(", ").append(bedRoomCount);
-        sb.append(", ").append(roomNo);
-        sb.append(", ").append(face);
-        sb.append(", ").append(floor);
-        sb.append(", ").append(floorTotal);
-        sb.append(", ").append(subwayPrimary);
-        sb.append(", ").append(imgUrl);
         sb.append(", ").append(roomStatus);
         sb.append(", ").append(email);
         sb.append(", ").append(formId);
