@@ -3,6 +3,7 @@ package com.leon.ziru.service;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.leon.ziru.dao.MissionDao;
 import com.leon.ziru.dao.UserDao;
 import com.leon.ziru.exception.BusinessError;
@@ -93,7 +94,7 @@ public class MissionService {
         RoomDetailData detail = getDetail(sourceUrl);
         if(detail.status.equals("zxpzz") || detail.status.equals("tzpzz")){
         }else {
-            throw new BusinessException(BusinessError.GENENRAL, "只有配置中和待释放的房源可以监控");
+            throw new BusinessException(BusinessError.GENENRAL, "只有配置中和空气质量指数检测中的房源可以监控");
         }
         Mission m = missionDao.get(sourceUrl, userId);
         if(m != null)
@@ -158,7 +159,6 @@ public class MissionService {
         for(Mission m : missionList){
             try {
                 RoomDetailData detail = getDetail(m.getSourceUrl());
-                ZRLogger.infoLog.info(m.getRoomName() + "：" + detail.status);
                 Integer status = statusMap.get(detail.status);
                 if(!status.equals(m.getRoomStatus())){    //房源状态改变了
                     //邮件
@@ -199,8 +199,10 @@ public class MissionService {
                         smsService.send(user.getPhone(), m.getId());
                     }
                 }
+            } catch (JsonSyntaxException e){
+                ZRLogger.debugLog.debug("monitoring Exception: " + m.getRoomName() + ":", e);
             } catch (Exception e) {
-                ZRLogger.errorLog.error("monitoring Exception:", e);
+                ZRLogger.errorLog.error("monitoring Exception: " + m.getRoomName() + ":", e);
             }
         }
     }
