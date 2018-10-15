@@ -75,6 +75,14 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true" />
             </Policies>
         </RollingFile>
+
+        <SMTP name="Mail" subject="自如抢房 - 报警通知" to="1274442622@qq.com" from="lituancheng@126.com"
+              smtpHost="smtp.126.com" smtpUsername="lituancheng@126.com" smtpPassword="li64580753" bufferSize="50" >
+        </SMTP>
+        <Async name="AsyncError">
+            <AppenderRef ref="errorLog"/>
+            <AppenderRef ref="Mail"/>
+        </Async>
     </Appenders>
     <Loggers>
         <logger name="reqLogger" level="info" additivity="false">
@@ -82,6 +90,7 @@
         </logger>
         <logger name="errorLogger" level="error" additivity="false">
             <AppenderRef ref="errorLog"/>
+            <AppenderRef ref="AsyncError"/>
         </logger>
         <logger name="infoLogger" level="info" additivity="false">
             <AppenderRef ref="infoLog"/>
