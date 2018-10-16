@@ -199,7 +199,7 @@ public class MissionService {
                         smsService.send(user.getPhone(), m.getId());
                     }
                 }
-            } catch (JsonSyntaxException e){
+            } catch (JsonSyntaxException | IllegalStateException e){
                 ZRLogger.debugLog.debug("monitoring Exception: " + m.getRoomName() + ":", e);
             } catch (Exception e) {
                 ZRLogger.errorLog.error("monitoring Exception: " + m.getRoomName() + ":", e);
