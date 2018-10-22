@@ -46,9 +46,12 @@ public class MissionDao extends BaseDao {
                 .fetchInto(Mission.class);
     }
 
-    public List<Mission> getAllEnableList(){
+    public List<Mission> getEnableListByLevel(Integer level){
         return ziruDsl.selectFrom(Tables.MISSION)
-                .where(Tables.MISSION.STATUS.eq(NORMAL))
+                .where(
+                        Tables.MISSION.STATUS.eq(NORMAL)
+                        .and(Tables.MISSION.LEVEL.eq(level))
+                )
                 .fetchInto(Mission.class);
     }
 
@@ -104,6 +107,14 @@ public class MissionDao extends BaseDao {
     public boolean sendSmsSuccess(Integer id){
         int execute = ziruDsl.update(Tables.MISSION)
                 .set(Tables.MISSION.SMS_STATUS, 1)
+                .where(Tables.MISSION.ID.eq(id))
+                .execute();
+        return execute > 0;
+    }
+
+    public boolean setLevel(Integer id, Integer level){
+        int execute = ziruDsl.update(Tables.MISSION)
+                .set(Tables.MISSION.LEVEL, level)
                 .where(Tables.MISSION.ID.eq(id))
                 .execute();
         return execute > 0;

@@ -24,10 +24,7 @@ public class AuthService {
 
     public String login(String code){
         try {
-            LoginResp loginResp = HttpClientUtil.httpGet(String.format(CODE_2_SESSION, APPID, SECRET, code), LoginResp.class);
-            String openid = loginResp.openid;
-            if(StringUtils.isEmpty(openid))
-                throw new BusinessException(BusinessError.GENENRAL, "登录状态异常，请稍后重试");
+            String openid = getOpenId(code);
             Integer userId;
             User user = userService.getByOpenId(openid);
             if(user == null){
@@ -40,6 +37,18 @@ public class AuthService {
             return SessionUtil.put(new SessionUser(userId, openid));
         } catch (Exception e) {
             throw new BusinessException(BusinessError.AUTH_LOGIN_FAIL);
+        }
+    }
+
+    public String getOpenId(String code){
+        try {
+            LoginResp loginResp = HttpClientUtil.httpGet(String.format(CODE_2_SESSION, APPID, SECRET, code), LoginResp.class);
+            String openid = loginResp.openid;
+            if(StringUtils.isEmpty(openid))
+                throw new BusinessException(BusinessError.GENENRAL, "登录状态异常，请稍后重试");
+            return openid;
+        } catch (Exception e) {
+            throw new BusinessException(BusinessError.GENENRAL, "获取openid失败");
         }
     }
 }

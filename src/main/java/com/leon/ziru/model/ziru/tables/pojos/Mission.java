@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission implements Serializable {
 
-    private static final long serialVersionUID = -332760494;
+    private static final long serialVersionUID = -1569177078;
 
     private Integer   id;
     private String    sourceUrl;
@@ -36,6 +36,7 @@ public class Mission implements Serializable {
     private Integer   emailStatus;
     private Integer   templateStatus;
     private Integer   smsStatus;
+    private Integer   level;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -53,6 +54,7 @@ public class Mission implements Serializable {
         this.emailStatus = value.emailStatus;
         this.templateStatus = value.templateStatus;
         this.smsStatus = value.smsStatus;
+        this.level = value.level;
         this.createTime = value.createTime;
         this.updateTime = value.updateTime;
     }
@@ -69,6 +71,7 @@ public class Mission implements Serializable {
         Integer   emailStatus,
         Integer   templateStatus,
         Integer   smsStatus,
+        Integer   level,
         Timestamp createTime,
         Timestamp updateTime
     ) {
@@ -83,6 +86,7 @@ public class Mission implements Serializable {
         this.emailStatus = emailStatus;
         this.templateStatus = templateStatus;
         this.smsStatus = smsStatus;
+        this.level = level;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -175,6 +179,14 @@ public class Mission implements Serializable {
         this.smsStatus = smsStatus;
     }
 
+    public Integer getLevel() {
+        return this.level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
     public Timestamp getCreateTime() {
         return this.createTime;
     }
@@ -206,6 +218,7 @@ public class Mission implements Serializable {
         sb.append(", ").append(emailStatus);
         sb.append(", ").append(templateStatus);
         sb.append(", ").append(smsStatus);
+        sb.append(", ").append(level);
         sb.append(", ").append(createTime);
         sb.append(", ").append(updateTime);
 

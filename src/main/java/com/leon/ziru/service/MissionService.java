@@ -14,6 +14,7 @@ import com.leon.ziru.model.AccessTokenResp;
 import com.leon.ziru.model.RoomDetailResp;
 import com.leon.ziru.model.RoomDetailResp.RoomDetailData;
 import com.leon.ziru.model.consts.CityCode;
+import com.leon.ziru.model.consts.SpeedLevel;
 import com.leon.ziru.model.send_temp.SendTemplateReq;
 import com.leon.ziru.model.session.SessionUser;
 import com.leon.ziru.model.ziru.tables.pojos.Mission;
@@ -150,12 +151,52 @@ public class MissionService {
     }
 
     /**
-     * 每隔5分钟监测一波房源变化
+     * VIP
      */
-    @Scheduled(cron = "0 0/5 *  * * ? ")
-    public void monitoring() {
+    @Scheduled(cron = "0 0/7 *  * * ? ")
+    public void vipMonitoring() {
+        List<Mission> missionList = missionDao.getEnableListByLevel(SpeedLevel.VIP.getLevel());
+        spiderStart(missionList);
+    }
+
+    /**
+     * 高速
+     */
+    @Scheduled(cron = "0 0/17 *  * * ? ")
+    public void highMonitoring() {
+        List<Mission> missionList = missionDao.getEnableListByLevel(SpeedLevel.HIGH.getLevel());
+        spiderStart(missionList);
+    }
+
+    /**
+     * 快速
+     */
+    @Scheduled(cron = "0 0/27 *  * * ? ")
+    public void quickMonitoring() {
+        List<Mission> missionList = missionDao.getEnableListByLevel(SpeedLevel.QUICK.getLevel());
+        spiderStart(missionList);
+    }
+
+    /**
+     * 中速
+     */
+    @Scheduled(cron = "0 0/37 *  * * ? ")
+    public void middleMonitoring() {
+        List<Mission> missionList = missionDao.getEnableListByLevel(SpeedLevel.MIDDLE.getLevel());
+        spiderStart(missionList);
+    }
+
+    /**
+     * 低速
+     */
+    @Scheduled(cron = "0 0/47 *  * * ? ")
+    public void lowMonitoring() {
+        List<Mission> missionList = missionDao.getEnableListByLevel(SpeedLevel.LOW.getLevel());
+        spiderStart(missionList);
+    }
+
+    private void spiderStart(List<Mission> missionList){
         AccessTokenResp accessTokenResp = null;
-        List<Mission> missionList = missionDao.getAllEnableList();
         for(Mission m : missionList){
             try {
                 RoomDetailData detail = getDetail(m.getSourceUrl());
@@ -185,7 +226,7 @@ public class MissionService {
                             SendTemplateReq.Data data = new SendTemplateReq.Data();
                             data.keyword1 = new SendTemplateReq.Data.Keyword("您监控的房源状态有变化啦");
                             data.keyword2 = new SendTemplateReq.Data.Keyword(sdf.format(new Date()));
-                            data.keyword3 = new SendTemplateReq.Data.Keyword("打赏一下~");
+                            data.keyword3 = new SendTemplateReq.Data.Keyword("帮到您了？打赏一下");
                             data.keyword4 = new SendTemplateReq.Data.Keyword(m.getRoomName());
                             req.data = data;
                             String resp = HttpClientUtil.httpPostJson(sendUrl, gson.toJson(req));

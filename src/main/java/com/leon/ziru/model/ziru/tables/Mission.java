@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Mission extends TableImpl<MissionRecord> {
 
-    private static final long serialVersionUID = 738908901;
+    private static final long serialVersionUID = 1141661013;
 
     /**
      * The reference instance of <code>mission</code>
@@ -109,6 +109,11 @@ public class Mission extends TableImpl<MissionRecord> {
      * The column <code>mission.sms_status</code>. 0 未发送短信 1 已发送
      */
     public final TableField<MissionRecord, Integer> SMS_STATUS = createField("sms_status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "0 未发送短信 1 已发送");
+
+    /**
+     * The column <code>mission.level</code>. 1 低速 2 中速 3 快速 4 高速 5 VIP
+     */
+    public final TableField<MissionRecord, Integer> LEVEL = createField("level", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.INTEGER)), this, "1 低速 2 中速 3 快速 4 高速 5 VIP");
 
     /**
      * The column <code>mission.create_time</code>.

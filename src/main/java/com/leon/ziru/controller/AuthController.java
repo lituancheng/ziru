@@ -24,6 +24,14 @@ public class AuthController {
         return new Respond(respond);
     }
 
+    @RequestMapping("get_openid")
+    public Respond getOpenId(@RequestParam String code){
+        String openId = authService.getOpenId(code);
+        Respond respond = new Respond();
+        respond.setData(openId);
+        return new Respond(respond);
+    }
+
     @RequestMapping("check_session")
     public Respond checkSession(@RequestParam String token){
         boolean valid = true;

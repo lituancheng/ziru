@@ -5,6 +5,7 @@ package com.leon.ziru.model.ziru;
 
 
 import com.leon.ziru.model.ziru.tables.Advice;
+import com.leon.ziru.model.ziru.tables.HelpPackage;
 import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
 
@@ -28,6 +29,11 @@ public class Tables {
      * The table <code>advice</code>.
      */
     public static final Advice ADVICE = com.leon.ziru.model.ziru.tables.Advice.ADVICE;
+
+    /**
+     * The table <code>help_package</code>.
+     */
+    public static final HelpPackage HELP_PACKAGE = com.leon.ziru.model.ziru.tables.HelpPackage.HELP_PACKAGE;
 
     /**
      * The table <code>mission</code>.
