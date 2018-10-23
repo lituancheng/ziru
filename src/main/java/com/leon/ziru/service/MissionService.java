@@ -108,7 +108,7 @@ public class MissionService {
         mission.setEmail(email);
         mission.setFormId(formId);
         if(id == null){
-            missionDao.insert(mission);
+            mission.setId(missionDao.insert(mission));
         }else {
             mission.setId(id);
             missionDao.update(mission);
