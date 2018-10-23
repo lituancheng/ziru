@@ -34,7 +34,7 @@ public class HelpService {
         helpDao.add(helpPackage);
         HelpMissionInfo helpMissionInfo = helpMissionInfo(missionId, openId);
         int sumPackage = helpMissionInfo.getSumPackage();
-        int level = (sumPackage / 20) + 1;
+        int level = (sumPackage / 10) + 1;
         level = level > 5 ? 5 : level;
         Mission mission = missionDao.get(missionId);
         if(level > mission.getLevel())
