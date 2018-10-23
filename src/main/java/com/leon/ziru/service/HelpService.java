@@ -36,7 +36,9 @@ public class HelpService {
         int sumPackage = helpMissionInfo.getSumPackage();
         int level = (sumPackage / 20) + 1;
         level = level > 5 ? 5 : level;
-        missionDao.setLevel(missionId, level);
+        Mission mission = missionDao.get(missionId);
+        if(level > mission.getLevel())
+            missionDao.setLevel(missionId, level);
         SpeedLevel speedLevel = SpeedLevel.levelOf(level);
         helpMissionInfo.setCurrentSpeed(speedLevel.getValue());
         helpMissionInfo.setProgressPercent(speedLevel.getPercent());
