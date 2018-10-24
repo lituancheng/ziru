@@ -118,8 +118,8 @@ public class MissionService {
 
     public RoomDetailData getDetail(String url) throws Exception {
         Pattern compile = Pattern.compile(ZR_DETAIL_PATTERN);
-        Matcher matcher = compile.matcher(url);
-        if(matcher.find()){
+        Matcher matcher = compile.matcher(url.trim());
+        if(matcher.matches()){
             String code = matcher.group(1);
             CityCode cityCode = CityCode.codeOf(code);
             if(cityCode == null)
