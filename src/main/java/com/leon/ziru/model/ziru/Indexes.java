@@ -5,6 +5,7 @@ package com.leon.ziru.model.ziru;
 
 
 import com.leon.ziru.model.ziru.tables.Advice;
+import com.leon.ziru.model.ziru.tables.CrawlerErrorInfo;
 import com.leon.ziru.model.ziru.tables.HelpPackage;
 import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
@@ -34,6 +35,7 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     public static final Index ADVICE_PRIMARY = Indexes0.ADVICE_PRIMARY;
+    public static final Index CRAWLER_ERROR_INFO_PRIMARY = Indexes0.CRAWLER_ERROR_INFO_PRIMARY;
     public static final Index HELP_PACKAGE_PRIMARY = Indexes0.HELP_PACKAGE_PRIMARY;
     public static final Index MISSION_PRIMARY = Indexes0.MISSION_PRIMARY;
     public static final Index USER_PRIMARY = Indexes0.USER_PRIMARY;
@@ -44,6 +46,7 @@ public class Indexes {
 
     private static class Indexes0 extends AbstractKeys {
         public static Index ADVICE_PRIMARY = createIndex("PRIMARY", Advice.ADVICE, new OrderField[] { Advice.ADVICE.ID }, true);
+        public static Index CRAWLER_ERROR_INFO_PRIMARY = createIndex("PRIMARY", CrawlerErrorInfo.CRAWLER_ERROR_INFO, new OrderField[] { CrawlerErrorInfo.CRAWLER_ERROR_INFO.ID }, true);
         public static Index HELP_PACKAGE_PRIMARY = createIndex("PRIMARY", HelpPackage.HELP_PACKAGE, new OrderField[] { HelpPackage.HELP_PACKAGE.ID }, true);
         public static Index MISSION_PRIMARY = createIndex("PRIMARY", Mission.MISSION, new OrderField[] { Mission.MISSION.ID }, true);
         public static Index USER_PRIMARY = createIndex("PRIMARY", User.USER, new OrderField[] { User.USER.ID }, true);

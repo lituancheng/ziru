@@ -5,6 +5,7 @@ package com.leon.ziru.model.ziru;
 
 
 import com.leon.ziru.model.ziru.tables.Advice;
+import com.leon.ziru.model.ziru.tables.CrawlerErrorInfo;
 import com.leon.ziru.model.ziru.tables.HelpPackage;
 import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
@@ -33,7 +34,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -22929178;
+    private static final long serialVersionUID = 501305295;
 
     /**
      * The reference instance of <code></code>
@@ -44,6 +45,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>advice</code>.
      */
     public final Advice ADVICE = com.leon.ziru.model.ziru.tables.Advice.ADVICE;
+
+    /**
+     * The table <code>crawler_error_info</code>.
+     */
+    public final CrawlerErrorInfo CRAWLER_ERROR_INFO = com.leon.ziru.model.ziru.tables.CrawlerErrorInfo.CRAWLER_ERROR_INFO;
 
     /**
      * The table <code>help_package</code>.
@@ -86,6 +92,7 @@ public class DefaultSchema extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Advice.ADVICE,
+            CrawlerErrorInfo.CRAWLER_ERROR_INFO,
             HelpPackage.HELP_PACKAGE,
             Mission.MISSION,
             User.USER);

@@ -42,13 +42,14 @@ public class MissionService {
 
     private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String EMAIL_PATTERN = "^([\\w-_]+(?:\\.[\\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\\.[a-z]{2,6})$";
     private static final String ZR_DETAIL_PATTERN = "https?://m\\.ziroom.com/(.*?)/room\\?id=([0-9]+).*";
     private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/v7/room/detail.json?city_code=%s&id=%s";
-    private static final String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID +"&secret=" + SECRET;
-    private static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
+    static final String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID +"&secret=" + SECRET;
+    static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
+    static final String SEND_TEMPLATE_ID = "WwDXdcsgyYQ6iF13WsuPHKJ1Uda_GQ7r0amFEuwNuJg";
 
     //dzz 可入住 ycz 已入住 yxd 已預定 zxpzz 配置中 tzpzz 配置中 sfz 倒计时中
     private HashMap<String, Integer> statusMap = new HashMap<String, Integer>(){
@@ -67,6 +68,9 @@ public class MissionService {
 
     @Autowired
     private SmsService smsService;
+
+    @Autowired
+    private CrawlerErrorInfoService crawlerErrorInfoService;
 
     @Autowired
     private MissionDao missionDao;
@@ -220,7 +224,7 @@ public class MissionService {
                         if(StringUtils.isNotEmpty(m.getFormId())) {
                             SendTemplateReq req = new SendTemplateReq();
                             req.touser = user.getOpenId();
-                            req.template_id = "WwDXdcsgyYQ6iF13WsuPHKJ1Uda_GQ7r0amFEuwNuJg";
+                            req.template_id = SEND_TEMPLATE_ID;
                             req.page = "pages/dashang/dashang";
                             req.form_id = m.getFormId();
                             SendTemplateReq.Data data = new SendTemplateReq.Data();
@@ -242,6 +246,7 @@ public class MissionService {
                 }
             } catch (JsonSyntaxException | IllegalStateException e){
                 ZRLogger.debugLog.debug("monitoring Exception: " + m.getRoomName() + ":", e);
+                crawlerErrorInfoService.addErrInfo(m.getId());
             } catch (Exception e) {
                 ZRLogger.errorLog.error("monitoring Exception: " + m.getRoomName() + ":", e);
             }
