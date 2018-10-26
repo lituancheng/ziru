@@ -55,7 +55,11 @@ public class CrawlerErrorInfoService {
     }
 
     public List<CrawlerErrorInfoItem> list(Integer status){
-        return crawlerErrorInfoDao.list(status);
+        List<CrawlerErrorInfoItem> list = crawlerErrorInfoDao.list(status);
+        list.forEach(c -> {
+            c.setStatusStr(c.getStatus() == 0 ? "未发送" : "已发送");
+        });
+        return list;
     }
 
     public boolean notice(int missionId){

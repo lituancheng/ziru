@@ -25,11 +25,10 @@ public class CrawlerErrerInfoController {
     private static final String MY_TOKEN = "grImyvTL3SYbAOUlGNsIMAIy6SljgTwUNNP2";
 
     @RequestMapping("list")
-    public Respond crawlerErrorInfoList(@RequestParam(required = false) Integer status, @RequestParam String token){
+    public List<CrawlerErrorInfoItem> crawlerErrorInfoList(@RequestParam(required = false) Integer status, @RequestParam String token){
         if(!MY_TOKEN.equals(token))
             throw new BusinessException(BusinessError.GENENRAL, "token不正确");
-        List<CrawlerErrorInfoItem> list = crawlerErrorInfoService.list(status);
-        return new Respond(list);
+        return crawlerErrorInfoService.list(status);
     }
 
     @RequestMapping("notice")
