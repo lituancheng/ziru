@@ -57,7 +57,7 @@ public class MissionService {
             put("dzz", 1);
             put("ycz", 2);
             put("yxd", 3);
-            put("zxpzz", 4);
+            put("zxpzz", 6);
             put("tzpzz", 4);
             put("sfz", 5);
         }
