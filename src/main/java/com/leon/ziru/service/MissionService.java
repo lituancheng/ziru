@@ -46,7 +46,7 @@ public class MissionService {
 
     private static final String EMAIL_PATTERN = "^([\\w-_]+(?:\\.[\\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\\.[a-z]{2,6})$";
     private static final String ZR_DETAIL_PATTERN = "https?://m\\.ziroom.com/(.*?)/room\\?id=([0-9]+).*";
-    private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/v7/room/detail.json?city_code=%s&id=%s";
+    private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/wap/detail/room.json?city_code=%s&id=%s";
     static final String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID +"&secret=" + SECRET;
     static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
     static final String SEND_TEMPLATE_ID = "WwDXdcsgyYQ6iF13WsuPHKJ1Uda_GQ7r0amFEuwNuJg";
@@ -247,8 +247,6 @@ public class MissionService {
             } catch (JsonSyntaxException | IllegalStateException e){
                 ZRLogger.debugLog.debug("monitoring Exception: " + m.getRoomName() + ":", e);
                 crawlerErrorInfoService.addErrInfo(m.getId());
-            } catch (BusinessException be){
-                ZRLogger.debugLog.debug("monitoring Exception: " + m.getRoomName() + ":", be);
             } catch (Exception e) {
                 ZRLogger.errorLog.error("monitoring Exception: " + m.getRoomName() + ":", e);
             }
