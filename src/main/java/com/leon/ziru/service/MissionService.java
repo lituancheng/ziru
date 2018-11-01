@@ -120,7 +120,7 @@ public class MissionService {
         return mission;
     }
 
-    public RoomDetailData getDetail(String url) throws Exception {
+    public static RoomDetailData getDetail(String url) throws Exception {
         Pattern compile = Pattern.compile(ZR_DETAIL_PATTERN);
         Matcher matcher = compile.matcher(url.trim());
         if(matcher.matches()){
@@ -132,8 +132,8 @@ public class MissionService {
             Map<String, String> headers = Maps.newHashMap();
             headers.put("Accept", "application/json;version=");
             headers.put("Referer", url);
-            headers.put("Host", "m.ziroom.com");
-            headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
+            headers.put("Host", "miniphoenix.ziroom.com");
+            headers.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
             String content = HttpClientUtil.httpGet(String.format(DETAIL_TEMPLATE, roomId), headers);
             RoomDetailResp resp = gson.fromJson(content, RoomDetailResp.class);
             if(resp != null && resp.error_code == 0){
