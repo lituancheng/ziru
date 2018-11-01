@@ -247,6 +247,8 @@ public class MissionService {
             } catch (JsonSyntaxException | IllegalStateException e){
                 ZRLogger.debugLog.debug("monitoring Exception: " + m.getRoomName() + ":", e);
                 crawlerErrorInfoService.addErrInfo(m.getId());
+            } catch (BusinessException be){
+                ZRLogger.debugLog.debug("monitoring Exception: " + m.getRoomName() + ":", be);
             } catch (Exception e) {
                 ZRLogger.errorLog.error("monitoring Exception: " + m.getRoomName() + ":", e);
             }
