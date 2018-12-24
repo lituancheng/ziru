@@ -7,11 +7,13 @@ package com.leon.ziru.model.ziru;
 import com.leon.ziru.model.ziru.tables.Advice;
 import com.leon.ziru.model.ziru.tables.CrawlerErrorInfo;
 import com.leon.ziru.model.ziru.tables.HelpPackage;
+import com.leon.ziru.model.ziru.tables.HomePageMessage;
 import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
 import com.leon.ziru.model.ziru.tables.records.AdviceRecord;
 import com.leon.ziru.model.ziru.tables.records.CrawlerErrorInfoRecord;
 import com.leon.ziru.model.ziru.tables.records.HelpPackageRecord;
+import com.leon.ziru.model.ziru.tables.records.HomePageMessageRecord;
 import com.leon.ziru.model.ziru.tables.records.MissionRecord;
 import com.leon.ziru.model.ziru.tables.records.UserRecord;
 
@@ -43,6 +45,7 @@ public class Keys {
     public static final Identity<AdviceRecord, Integer> IDENTITY_ADVICE = Identities0.IDENTITY_ADVICE;
     public static final Identity<CrawlerErrorInfoRecord, Integer> IDENTITY_CRAWLER_ERROR_INFO = Identities0.IDENTITY_CRAWLER_ERROR_INFO;
     public static final Identity<HelpPackageRecord, Integer> IDENTITY_HELP_PACKAGE = Identities0.IDENTITY_HELP_PACKAGE;
+    public static final Identity<HomePageMessageRecord, Integer> IDENTITY_HOME_PAGE_MESSAGE = Identities0.IDENTITY_HOME_PAGE_MESSAGE;
     public static final Identity<MissionRecord, Integer> IDENTITY_MISSION = Identities0.IDENTITY_MISSION;
     public static final Identity<UserRecord, Integer> IDENTITY_USER = Identities0.IDENTITY_USER;
 
@@ -53,6 +56,7 @@ public class Keys {
     public static final UniqueKey<AdviceRecord> KEY_ADVICE_PRIMARY = UniqueKeys0.KEY_ADVICE_PRIMARY;
     public static final UniqueKey<CrawlerErrorInfoRecord> KEY_CRAWLER_ERROR_INFO_PRIMARY = UniqueKeys0.KEY_CRAWLER_ERROR_INFO_PRIMARY;
     public static final UniqueKey<HelpPackageRecord> KEY_HELP_PACKAGE_PRIMARY = UniqueKeys0.KEY_HELP_PACKAGE_PRIMARY;
+    public static final UniqueKey<HomePageMessageRecord> KEY_HOME_PAGE_MESSAGE_PRIMARY = UniqueKeys0.KEY_HOME_PAGE_MESSAGE_PRIMARY;
     public static final UniqueKey<MissionRecord> KEY_MISSION_PRIMARY = UniqueKeys0.KEY_MISSION_PRIMARY;
     public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = UniqueKeys0.KEY_USER_PRIMARY;
 
@@ -69,6 +73,7 @@ public class Keys {
         public static Identity<AdviceRecord, Integer> IDENTITY_ADVICE = createIdentity(Advice.ADVICE, Advice.ADVICE.ID);
         public static Identity<CrawlerErrorInfoRecord, Integer> IDENTITY_CRAWLER_ERROR_INFO = createIdentity(CrawlerErrorInfo.CRAWLER_ERROR_INFO, CrawlerErrorInfo.CRAWLER_ERROR_INFO.ID);
         public static Identity<HelpPackageRecord, Integer> IDENTITY_HELP_PACKAGE = createIdentity(HelpPackage.HELP_PACKAGE, HelpPackage.HELP_PACKAGE.ID);
+        public static Identity<HomePageMessageRecord, Integer> IDENTITY_HOME_PAGE_MESSAGE = createIdentity(HomePageMessage.HOME_PAGE_MESSAGE, HomePageMessage.HOME_PAGE_MESSAGE.ID);
         public static Identity<MissionRecord, Integer> IDENTITY_MISSION = createIdentity(Mission.MISSION, Mission.MISSION.ID);
         public static Identity<UserRecord, Integer> IDENTITY_USER = createIdentity(User.USER, User.USER.ID);
     }
@@ -77,6 +82,7 @@ public class Keys {
         public static final UniqueKey<AdviceRecord> KEY_ADVICE_PRIMARY = createUniqueKey(Advice.ADVICE, "KEY_advice_PRIMARY", Advice.ADVICE.ID);
         public static final UniqueKey<CrawlerErrorInfoRecord> KEY_CRAWLER_ERROR_INFO_PRIMARY = createUniqueKey(CrawlerErrorInfo.CRAWLER_ERROR_INFO, "KEY_crawler_error_info_PRIMARY", CrawlerErrorInfo.CRAWLER_ERROR_INFO.ID);
         public static final UniqueKey<HelpPackageRecord> KEY_HELP_PACKAGE_PRIMARY = createUniqueKey(HelpPackage.HELP_PACKAGE, "KEY_help_package_PRIMARY", HelpPackage.HELP_PACKAGE.ID);
+        public static final UniqueKey<HomePageMessageRecord> KEY_HOME_PAGE_MESSAGE_PRIMARY = createUniqueKey(HomePageMessage.HOME_PAGE_MESSAGE, "KEY_home_page_message_PRIMARY", HomePageMessage.HOME_PAGE_MESSAGE.ID);
         public static final UniqueKey<MissionRecord> KEY_MISSION_PRIMARY = createUniqueKey(Mission.MISSION, "KEY_mission_PRIMARY", Mission.MISSION.ID);
         public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = createUniqueKey(User.USER, "KEY_user_PRIMARY", User.USER.ID);
     }

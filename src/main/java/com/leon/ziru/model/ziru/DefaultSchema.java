@@ -7,6 +7,7 @@ package com.leon.ziru.model.ziru;
 import com.leon.ziru.model.ziru.tables.Advice;
 import com.leon.ziru.model.ziru.tables.CrawlerErrorInfo;
 import com.leon.ziru.model.ziru.tables.HelpPackage;
+import com.leon.ziru.model.ziru.tables.HomePageMessage;
 import com.leon.ziru.model.ziru.tables.Mission;
 import com.leon.ziru.model.ziru.tables.User;
 
@@ -34,7 +35,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = 501305295;
+    private static final long serialVersionUID = 957140088;
 
     /**
      * The reference instance of <code></code>
@@ -55,6 +56,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>help_package</code>.
      */
     public final HelpPackage HELP_PACKAGE = com.leon.ziru.model.ziru.tables.HelpPackage.HELP_PACKAGE;
+
+    /**
+     * The table <code>home_page_message</code>.
+     */
+    public final HomePageMessage HOME_PAGE_MESSAGE = com.leon.ziru.model.ziru.tables.HomePageMessage.HOME_PAGE_MESSAGE;
 
     /**
      * The table <code>mission</code>.
@@ -94,6 +100,7 @@ public class DefaultSchema extends SchemaImpl {
             Advice.ADVICE,
             CrawlerErrorInfo.CRAWLER_ERROR_INFO,
             HelpPackage.HELP_PACKAGE,
+            HomePageMessage.HOME_PAGE_MESSAGE,
             Mission.MISSION,
             User.USER);
     }
