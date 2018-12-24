@@ -23,10 +23,12 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class HomePageMessage implements Serializable {
 
-    private static final long serialVersionUID = 1084162825;
+    private static final long serialVersionUID = -499790471;
 
     private Integer   id;
-    private String    jsonContent;
+    private String    msgP;
+    private String    msgA;
+    private String    iMsg;
     private Integer   enable;
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -35,7 +37,9 @@ public class HomePageMessage implements Serializable {
 
     public HomePageMessage(HomePageMessage value) {
         this.id = value.id;
-        this.jsonContent = value.jsonContent;
+        this.msgP = value.msgP;
+        this.msgA = value.msgA;
+        this.iMsg = value.iMsg;
         this.enable = value.enable;
         this.createTime = value.createTime;
         this.updateTime = value.updateTime;
@@ -43,13 +47,17 @@ public class HomePageMessage implements Serializable {
 
     public HomePageMessage(
         Integer   id,
-        String    jsonContent,
+        String    msgP,
+        String    msgA,
+        String    iMsg,
         Integer   enable,
         Timestamp createTime,
         Timestamp updateTime
     ) {
         this.id = id;
-        this.jsonContent = jsonContent;
+        this.msgP = msgP;
+        this.msgA = msgA;
+        this.iMsg = iMsg;
         this.enable = enable;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -63,12 +71,28 @@ public class HomePageMessage implements Serializable {
         this.id = id;
     }
 
-    public String getJsonContent() {
-        return this.jsonContent;
+    public String getMsgP() {
+        return this.msgP;
     }
 
-    public void setJsonContent(String jsonContent) {
-        this.jsonContent = jsonContent;
+    public void setMsgP(String msgP) {
+        this.msgP = msgP;
+    }
+
+    public String getMsgA() {
+        return this.msgA;
+    }
+
+    public void setMsgA(String msgA) {
+        this.msgA = msgA;
+    }
+
+    public String getIMsg() {
+        return this.iMsg;
+    }
+
+    public void setIMsg(String iMsg) {
+        this.iMsg = iMsg;
     }
 
     public Integer getEnable() {
@@ -100,7 +124,9 @@ public class HomePageMessage implements Serializable {
         StringBuilder sb = new StringBuilder("HomePageMessage (");
 
         sb.append(id);
-        sb.append(", ").append(jsonContent);
+        sb.append(", ").append(msgP);
+        sb.append(", ").append(msgA);
+        sb.append(", ").append(iMsg);
         sb.append(", ").append(enable);
         sb.append(", ").append(createTime);
         sb.append(", ").append(updateTime);

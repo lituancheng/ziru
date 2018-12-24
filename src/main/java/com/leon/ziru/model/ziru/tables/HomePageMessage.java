@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class HomePageMessage extends TableImpl<HomePageMessageRecord> {
 
-    private static final long serialVersionUID = -2114472017;
+    private static final long serialVersionUID = 2077251872;
 
     /**
      * The reference instance of <code>home_page_message</code>
@@ -61,9 +61,19 @@ public class HomePageMessage extends TableImpl<HomePageMessageRecord> {
     public final TableField<HomePageMessageRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     /**
-     * The column <code>home_page_message.json_content</code>.
+     * The column <code>home_page_message.msg_p</code>.
      */
-    public final TableField<HomePageMessageRecord, String> JSON_CONTENT = createField("json_content", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<HomePageMessageRecord, String> MSG_P = createField("msg_p", org.jooq.impl.SQLDataType.VARCHAR(128).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
+    /**
+     * The column <code>home_page_message.msg_a</code>.
+     */
+    public final TableField<HomePageMessageRecord, String> MSG_A = createField("msg_a", org.jooq.impl.SQLDataType.VARCHAR(128), this, "");
+
+    /**
+     * The column <code>home_page_message.i_msg</code>.
+     */
+    public final TableField<HomePageMessageRecord, String> I_MSG = createField("i_msg", org.jooq.impl.SQLDataType.VARCHAR(128), this, "");
 
     /**
      * The column <code>home_page_message.enable</code>.
