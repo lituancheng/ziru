@@ -46,7 +46,7 @@ public class MissionService {
 
     private static final String EMAIL_PATTERN = "^([\\w-_]+(?:\\.[\\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\\.[a-z]{2,6})$";
     private static final String ZR_DETAIL_PATTERN = "https?://m\\.ziroom.com/(.*?)/room\\?id=([0-9]+).*";
-    private static final String DETAIL_TEMPLATE = "https://miniphoenix.ziroom.com/v7/room/detail.json?cityCode=&id=%s&house_id=";
+    private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/wap/detail/room.json?city_code=%s&id=%s";
     static final String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID +"&secret=" + SECRET;
     static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
     static final String SEND_TEMPLATE_ID = "WwDXdcsgyYQ6iF13WsuPHKJ1Uda_GQ7r0amFEuwNuJg";
@@ -132,9 +132,9 @@ public class MissionService {
             Map<String, String> headers = Maps.newHashMap();
             headers.put("Accept", "application/json;version=");
             headers.put("Referer", url);
-            headers.put("Host", "miniphoenix.ziroom.com");
-            headers.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
-            String content = HttpClientUtil.httpGet(String.format(DETAIL_TEMPLATE, roomId), headers);
+            headers.put("Host", "m.ziroom.com");
+            headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
+            String content = HttpClientUtil.httpGet(String.format(DETAIL_TEMPLATE, cityCode.getCode(), roomId), headers);
             RoomDetailResp resp = gson.fromJson(content, RoomDetailResp.class);
             if(resp != null && resp.error_code == 0){
                 return resp.data;
