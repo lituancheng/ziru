@@ -24,7 +24,7 @@ public enum  CityCode {
     }
 
     public static CityCode codeOf(String code){
-        switch (code){
+        switch (code.toUpperCase()){
             case "BJ":
                 return BJ;
             case "SH":
