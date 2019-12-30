@@ -45,7 +45,10 @@ public class MissionService {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String EMAIL_PATTERN = "^([\\w-_]+(?:\\.[\\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\\.[a-z]{2,6})$";
-    private static final String ZR_DETAIL_PATTERN = "https?://m\\.ziroom.com/(.*?)/.*?/([0-9]+).*";
+
+    private static final String ZR_DETAIL_PATTERN_1 = "https?://m\\.ziroom.com/(.*?)/room\\?id=([0-9]+).*";
+    private static final String ZR_DETAIL_PATTERN_2 = "https?://m\\.ziroom.com/(.*?)/.*?/([0-9]+).*";
+
     private static final String DETAIL_TEMPLATE = "http://m.ziroom.com/wap/detail/room.json?city_code=%s&id=%s";
     static final String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID +"&secret=" + SECRET;
     static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
@@ -121,29 +124,39 @@ public class MissionService {
     }
 
     public static RoomDetailData getDetail(String url) throws Exception {
-        Pattern compile = Pattern.compile(ZR_DETAIL_PATTERN);
-        Matcher matcher = compile.matcher(url.trim());
-        if(matcher.matches()){
-            String code = matcher.group(1);
-            CityCode cityCode = CityCode.codeOf(code);
-            if(cityCode == null)
-                throw new BusinessException(BusinessError.GENENRAL, "目前不支持监控该区域的房源，如有需要请联系客服");
-            String roomId = matcher.group(2);
-            Map<String, String> headers = Maps.newHashMap();
-            headers.put("Accept", "application/json;version=");
-            headers.put("Referer", url);
-            headers.put("Host", "m.ziroom.com");
-            headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
-            String content = HttpClientUtil.httpGet(String.format(DETAIL_TEMPLATE, cityCode.getCode(), roomId), headers);
-            RoomDetailResp resp = gson.fromJson(content, RoomDetailResp.class);
-            if(resp != null && resp.error_code == 0){
-                return resp.data;
-            }
-            else
-                throw new BusinessException(BusinessError.ZIRU_GET_DATA_ERROR);
+        Pattern compile1 = Pattern.compile(ZR_DETAIL_PATTERN_1);
+        Matcher matcher1 = compile1.matcher(url.trim());
+
+        Pattern compile2 = Pattern.compile(ZR_DETAIL_PATTERN_2);
+        Matcher matcher2 = compile2.matcher(url.trim());
+
+        if(matcher1.matches()){
+            return parseDetail(url, matcher1);
+        }else if(matcher2.matches()){
+            return parseDetail(url, matcher2);
         }else {
             throw new BusinessException(BusinessError.GENENRAL, "链接格式错误");
         }
+    }
+
+    private static RoomDetailData parseDetail(String url, Matcher matcher) throws Exception {
+        String code = matcher.group(1);
+        CityCode cityCode = CityCode.codeOf(code);
+        if(cityCode == null)
+            throw new BusinessException(BusinessError.GENENRAL, "目前不支持监控该区域的房源，如有需要请联系客服");
+        String roomId = matcher.group(2);
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put("Accept", "application/json;version=");
+        headers.put("Referer", url);
+        headers.put("Host", "m.ziroom.com");
+        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
+        String content = HttpClientUtil.httpGet(String.format(DETAIL_TEMPLATE, cityCode.getCode(), roomId), headers);
+        RoomDetailResp resp = gson.fromJson(content, RoomDetailResp.class);
+        if(resp != null && resp.error_code == 0){
+            return resp.data;
+        }
+        else
+            throw new BusinessException(BusinessError.ZIRU_GET_DATA_ERROR);
     }
 
     public boolean delete(Integer id, String token){
