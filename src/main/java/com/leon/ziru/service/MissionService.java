@@ -54,7 +54,7 @@ public class MissionService {
     static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
     static final String SEND_TEMPLATE_ID = "WwDXdcsgyYQ6iF13WsuPHKJ1Uda_GQ7r0amFEuwNuJg";
 
-    //dzz 可入住 ycz 已入住 yxd 已預定 zxpzz 配置中 tzpzz 配置中 sfz 倒计时中
+    //dzz 待释放 ycz 已入住 yxd 已預定 zxpzz 配置中 tzpzz 配置中 sfz 倒计时中
     private HashMap<String, Integer> statusMap = new HashMap<String, Integer>(){
         {
             put("dzz", 1);
@@ -100,7 +100,7 @@ public class MissionService {
         if(!Pattern.matches(EMAIL_PATTERN, email))
             throw new BusinessException(BusinessError.GENENRAL, "邮箱格式不正确");
         RoomDetailData detail = getDetail(sourceUrl);
-        if(detail.status.equals("zxpzz") || detail.status.equals("tzpzz")){
+        if(detail.status.equals("zxpzz") || detail.status.equals("tzpzz") || detail.status.equals("dzz")){
         }else {
             throw new BusinessException(BusinessError.GENENRAL, "只有配置中和空气质量指数检测中的房源可以监控");
         }
@@ -218,7 +218,7 @@ public class MissionService {
             try {
                 RoomDetailData detail = getDetail(m.getSourceUrl());
                 Integer status = statusMap.get(detail.status);
-                if(!status.equals(4) && !status.equals(6)){    //房源状态改变了
+                if(!status.equals(m.getStatus())){    //房源状态改变了
                     //邮件
                     mailer.sendSimpleMail("自如抢房通知",
                             "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail(), m.getId());
