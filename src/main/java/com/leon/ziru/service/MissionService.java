@@ -218,7 +218,7 @@ public class MissionService {
             try {
                 RoomDetailData detail = getDetail(m.getSourceUrl());
                 Integer status = statusMap.get(detail.status);
-                if(!status.equals(m.getStatus())){    //房源状态改变了
+                if(!status.equals(m.getRoomStatus())){    //房源状态改变了
                     //邮件
                     mailer.sendSimpleMail("自如抢房通知",
                             "您监控的房源【" + m.getRoomName() + "】状态更新了，请及时前往自如App查看", m.getEmail(), m.getId());
